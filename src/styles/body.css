@@ -1,0 +1,26 @@
+body {
+	background: rgb(65, 65, 65);
+	background: -moz-radial-gradient(
+		circle,
+		rgba(65, 65, 65, 1) 0%,
+		rgba(40, 40, 40, 1) 100%
+	);
+	background: -webkit-radial-gradient(
+		circle,
+		rgba(65, 65, 65, 1) 0%,
+		rgba(40, 40, 40, 1) 100%
+	);
+	background: radial-gradient(
+		circle,
+		rgba(65, 65, 65, 1) 0%,
+		rgba(40, 40, 40, 1) 100%
+	);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#414141",endColorstr="#282828",GradientType=1);
+
+    width: 100vw;
+    height: 100vh;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
