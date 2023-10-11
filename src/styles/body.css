@@ -3,17 +3,17 @@ body {
 	background: -moz-radial-gradient(
 		circle,
 		rgba(65, 65, 65, 1) 0%,
-		rgba(40, 40, 40, 1) 100%
+		rgba(40, 40, 40, 1) 45%
 	);
 	background: -webkit-radial-gradient(
 		circle,
 		rgba(65, 65, 65, 1) 0%,
-		rgba(40, 40, 40, 1) 100%
+		rgba(40, 40, 40, 1) 45%
 	);
 	background: radial-gradient(
 		circle,
 		rgba(65, 65, 65, 1) 0%,
-		rgba(40, 40, 40, 1) 100%
+		rgba(40, 40, 40, 1) 45%
 	);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#414141",endColorstr="#282828",GradientType=1);
 
