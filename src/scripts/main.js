@@ -1,10 +1,10 @@
 import { keyMap } from "./keymap.js";
-import { PlayerClass } from "./Player.js";
 import { render } from "./render.js";
+import { world } from "./world.js";
 
 const instance = {
 	game: undefined,
-	entities: [new PlayerClass(220, 220, "red")],
+	world,
 };
 let isGameRunning = true;
 

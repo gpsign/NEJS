@@ -1,5 +1,6 @@
 import { p, screen } from "./render.js";
 import { keyMap } from "./keymap.js";
+import { world } from "./world.js";
 
 export class PlayerClass {
 	vx = 0;
@@ -11,10 +12,11 @@ export class PlayerClass {
 	deacceleration = 0.25;
 	width = 64;
 	height = 64;
-	top = this.y;
+	top = this.x;
 	right = this.x + this.width;
 	bottom = this.y + this.height;
 	left = this.y;
+	onGround = false;
 
 	constructor(x, y, color) {
 		this.x = x;
@@ -38,7 +40,8 @@ export class PlayerClass {
 			this.vx = -this.vxCap;
 		}
 
-		if ((this.vx < 0.1 && this.vx > 0) || (this.vx > -0.1 && this.vx < 0)) {
+		//Fix sliding
+		if ((this.vx < 0.2 && this.vx > 0) || (this.vx > -0.2 && this.vx < 0)) {
 			this.vx = 0;
 		}
 	}
@@ -62,14 +65,16 @@ export class PlayerClass {
 		keyMap["shift"] ? (this.vxCap = 8) : (this.vxCap = 4);
 
 		//Gravity
-		this.sumVy(0.25);
+		this.sumVy(world.gravity);
 
 		//deaccelerates when not moving
 		if (!keyMap["a"] && !keyMap["d"]) this.deaccelerate();
 
 		//Jumps
-		if ((keyMap["w"] || keyMap[" "]) && this.bottom === screen.height)
+		if ((keyMap["w"] || keyMap[" "]) && this.onGround) {
+			this.onGround = false;
 			this.sumVy(this.jumpHeight);
+		}
 
 		let direction = 0;
 
@@ -85,19 +90,86 @@ export class PlayerClass {
 		//Cancel Movement
 		if (keyMap["a"] && keyMap["d"]) this.deaccelerate();
 
-		//Colides with ground
+		//Check for wall collisions
+		world.walls.forEach((wall) => {
+			const fRight = this.right + this.vx;
+			const fLeft = this.left + this.vx;
+			const fBottom = this.bottom + this.vy;
+			const fTop = this.top + this.vy;
+
+			let onTop = false;
+
+			//Check if it is above the wall
+			if (
+				((fRight >= wall.left && fRight <= wall.right) ||
+					(fLeft >= wall.left && fLeft <= wall.right) ||
+					(this.left <= wall.left && this.right >= wall.right)) &&
+				fBottom <= wall.top + this.vy
+			) {
+				//Check for collision
+				if (fBottom >= wall.top && fBottom <= wall.bottom) {
+					while (this.y + this.height < wall.top - 2) this.y++;
+					this.vy = 0;
+					this.onGround = true;
+				}
+			}
+
+			//Check if its is below the wall
+			if (
+				((fRight >= wall.left && fRight <= wall.right) ||
+					(fLeft >= wall.left && fLeft <= wall.right) ||
+					(this.left <= wall.left && this.right >= wall.right)) &&
+				fTop >= wall.bottom + this.vy
+			) {
+				//Check for collision
+				if (fTop <= wall.bottom + 1 && fTop >= wall.top) {
+					while (this.y > wall.bottom + 2) this.y--;
+					this.vy = 0;
+				}
+			}
+
+			//Check if its is on the left side of the wall
+			if (
+				((fTop >= wall.top && fTop <= wall.bottom) ||
+					(fBottom >= wall.top && fBottom <= wall.bottom)) &&
+				fRight < wall.left + this.vx
+			) {
+				//Check for collison
+				if (fRight <= wall.right && fRight >= wall.left) {
+					while (this.x + this.width < wall.left - 2) this.x++;
+					this.vx = 0;
+				}
+			}
+
+			//Check if its is on the right side of the wall
+			if (
+				((fTop >= wall.top && fTop <= wall.bottom) ||
+					(fBottom >= wall.top && fBottom <= wall.bottom) ||
+					(this.top <= wall.top && this.bottom >= wall.bottom)) &&
+				fLeft > wall.right + this.vx
+			) {
+				//Check for collison
+				if (fLeft <= wall.right && fLeft >= wall.left) {
+					while (this.x > wall.right + 2) this.x--;
+					this.vx = 0;
+				}
+			}
+		});
+
+		//Collides with ground
 		if (this.bottom + this.vy > screen.height) {
+			this.onGround = true;
 			while (this.y + this.height < screen.height) this.y++;
 			this.vy = 0;
 		}
 
-		//Colides with right wall
+		//Collides with right wall
 		if (this.right + this.vx > screen.width) {
 			while (this.x + this.width < screen.width - 1) this.x++;
 			this.vx = 0;
 		}
 
-		//Colides with left wall
+		//Collides with left wall
 		if (this.left + this.vx > screen.width || this.x + this.vx < 0) {
 			while (this.x > 1) this.x--;
 			this.vx = 0;

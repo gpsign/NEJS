@@ -4,9 +4,13 @@ const p = screen.getContext("2d");
 function render(instance) {
 	p.clearRect(0, 0, screen.width, screen.height);
 
-	instance.entities.forEach((entity) => {
+	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
 		entity.render();
+	});
+
+	instance.world.walls.forEach((walls) => {
+		walls.render();
 	});
 
 	instance.game = window.requestAnimationFrame(() => render(instance));
