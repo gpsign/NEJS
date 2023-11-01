@@ -103,12 +103,13 @@ export class PlayerClass {
 			if (
 				((fRight >= wall.left && fRight <= wall.right) ||
 					(fLeft >= wall.left && fLeft <= wall.right) ||
+					(fLeft <= wall.left && fRight >= wall.right) ||
 					(this.left <= wall.left && this.right >= wall.right)) &&
 				fBottom <= wall.top + this.vy
 			) {
 				//Check for collision
 				if (fBottom >= wall.top && fBottom <= wall.bottom) {
-					while (this.y + this.height < wall.top - 2) this.y++;
+					while (this.y + this.height < wall.top - 1) this.y++;
 					this.vy = 0;
 					this.onGround = true;
 				}
@@ -118,6 +119,7 @@ export class PlayerClass {
 			if (
 				((fRight >= wall.left && fRight <= wall.right) ||
 					(fLeft >= wall.left && fLeft <= wall.right) ||
+					(fLeft <= wall.left && fRight >= wall.right) ||
 					(this.left <= wall.left && this.right >= wall.right)) &&
 				fTop >= wall.bottom + this.vy
 			) {
@@ -131,12 +133,13 @@ export class PlayerClass {
 			//Check if its is on the left side of the wall
 			if (
 				((fTop >= wall.top && fTop <= wall.bottom) ||
+					(fTop <= wall.top && fBottom >= wall.bottom) ||
 					(fBottom >= wall.top && fBottom <= wall.bottom)) &&
 				fRight < wall.left + this.vx
 			) {
 				//Check for collison
 				if (fRight <= wall.right && fRight >= wall.left) {
-					while (this.x + this.width < wall.left - 2) this.x++;
+					while (this.x + this.width < wall.left - 1) this.x++;
 					this.vx = 0;
 				}
 			}
@@ -144,13 +147,14 @@ export class PlayerClass {
 			//Check if its is on the right side of the wall
 			if (
 				((fTop >= wall.top && fTop <= wall.bottom) ||
+					(fTop <= wall.top && fBottom >= wall.bottom) ||
 					(fBottom >= wall.top && fBottom <= wall.bottom) ||
 					(this.top <= wall.top && this.bottom >= wall.bottom)) &&
 				fLeft > wall.right + this.vx
 			) {
 				//Check for collison
 				if (fLeft <= wall.right && fLeft >= wall.left) {
-					while (this.x > wall.right + 2) this.x--;
+					while (this.x > wall.right + 1) this.x--;
 					this.vx = 0;
 				}
 			}
