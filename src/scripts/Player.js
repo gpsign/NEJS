@@ -62,7 +62,7 @@ export class PlayerClass {
 	}
 	changeSprite() {
 		//Checks for a full sprite step
-		if (this.renderStepCount >= instance.FPS / this.spriteChangeRate) {
+		if (this.renderStepCount >= 60 / this.spriteChangeRate) {
 			this.renderStepCount = 0;
 			this.spriteIndex++;
 			if (this.spriteIndex >= this.spriteArray.length) this.spriteIndex = 0;

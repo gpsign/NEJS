@@ -4,10 +4,10 @@ import { world } from "./world.js";
 
 export const instance = {
 	game: undefined,
+	isGameRunning: true,
 	world,
-	FPS: 60
+	FPS: 60,
 };
-let isGameRunning = true;
 
 function start() {
 	instance.game = setInterval(() => {
@@ -23,9 +23,9 @@ document.addEventListener("keydown", (e) => {
 	if (key === "r") location.reload();
 
 	if (key === "enter") {
-		isGameRunning ? clearInterval(instance.game) : start();
+		instance.isGameRunning ? clearInterval(instance.game) : start();
 
-		isGameRunning = !isGameRunning;
+		instance.isGameRunning = !instance.isGameRunning;
 	}
 	keyMap[key] = true;
 });
