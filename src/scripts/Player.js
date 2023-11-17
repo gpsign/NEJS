@@ -17,6 +17,9 @@ export class PlayerClass {
 	bottom = this.y + this.height;
 	left = this.y;
 	onGround = false;
+	stepRenderCount = 0;
+	spriteCount = 0;
+	colorArray = ["cyan", "blue", "lime", "yellow", "orange", "purple"];
 
 	constructor(x, y, color) {
 		this.x = x;
@@ -56,8 +59,16 @@ export class PlayerClass {
 		else if (this.vx < 0) this.sumVx(this.deacceleration);
 	}
 	render() {
+		if (this.stepRenderCount >= 20) {
+			this.stepRenderCount = 0;
+			this.spriteCount++;
+			if (this.spriteCount >= 5) this.spriteCount = 0;
+		}
+		this.color = this.colorArray[this.spriteCount];
+
 		p.fillStyle = this.color;
 		p.fillRect(this.x, this.y, this.width, this.height);
+		this.stepRenderCount++;
 	}
 	calculateMovement() {
 		this.updateSides();
