@@ -2,18 +2,17 @@ import { keyMap } from "./keymap.js";
 import { render } from "./render.js";
 import { world } from "./world.js";
 
-const instance = {
+export const instance = {
 	game: undefined,
 	world,
+	FPS: 60
 };
 let isGameRunning = true;
-
-const FPS = 60;
 
 function start() {
 	instance.game = setInterval(() => {
 		window.requestAnimationFrame(() => render(instance));
-	}, 1000 / FPS);
+	}, 1000 / instance.FPS);
 }
 start();
 

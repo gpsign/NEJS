@@ -1,6 +1,7 @@
 import { p, screen } from "./render.js";
 import { keyMap } from "./keymap.js";
 import { world } from "./world.js";
+import { instance } from "./main.js";
 
 export class PlayerClass {
 	vx = 0;
@@ -17,9 +18,10 @@ export class PlayerClass {
 	bottom = this.y + this.height;
 	left = this.y;
 	onGround = false;
-	stepRenderCount = 0;
-	spriteCount = 0;
-	colorArray = ["cyan", "blue", "lime", "yellow", "orange", "purple"];
+	renderStepCount = 0;
+	spriteIndex = 0;
+	spriteArray = ["cyan", "blue", "lime", "yellow", "orange", "purple"];
+	spriteChangeRate = 3;
 
 	constructor(x, y, color) {
 		this.x = x;
@@ -58,17 +60,25 @@ export class PlayerClass {
 		if (this.vx > 0) this.sumVx(-this.deacceleration);
 		else if (this.vx < 0) this.sumVx(this.deacceleration);
 	}
-	render() {
-		if (this.stepRenderCount >= 20) {
-			this.stepRenderCount = 0;
-			this.spriteCount++;
-			if (this.spriteCount >= 5) this.spriteCount = 0;
+	changeSprite() {
+		//Checks for a full sprite step
+		if (this.renderStepCount >= instance.FPS / this.spriteChangeRate) {
+			this.renderStepCount = 0;
+			this.spriteIndex++;
+			if (this.spriteIndex >= this.spriteArray.length) this.spriteIndex = 0;
 		}
-		this.color = this.colorArray[this.spriteCount];
+		this.color = this.spriteArray[this.spriteIndex];
+	}
+	render() {
+		//Sprite logic
+		this.changeSprite();
 
+		//Render
 		p.fillStyle = this.color;
 		p.fillRect(this.x, this.y, this.width, this.height);
-		this.stepRenderCount++;
+
+		//StepCount for changing sprite
+		this.renderStepCount++;
 	}
 	calculateMovement() {
 		this.updateSides();
