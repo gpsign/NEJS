@@ -12,8 +12,6 @@ function render(instance) {
 	instance.world.walls.forEach((walls) => {
 		walls.render();
 	});
-
-	instance.game = window.requestAnimationFrame(() => render(instance));
 }
 
 export { render, p, screen };

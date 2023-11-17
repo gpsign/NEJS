@@ -8,7 +8,14 @@ const instance = {
 };
 let isGameRunning = true;
 
-window.requestAnimationFrame(() => render(instance));
+const FPS = 60;
+
+function start() {
+	instance.game = setInterval(() => {
+		window.requestAnimationFrame(() => render(instance));
+	}, 1000 / FPS);
+}
+start();
 
 document.addEventListener("keydown", (e) => {
 	e.preventDefault();
@@ -17,9 +24,7 @@ document.addEventListener("keydown", (e) => {
 	if (key === "r") location.reload();
 
 	if (key === "enter") {
-		isGameRunning
-			? window.cancelAnimationFrame(instance.game)
-			: (instance.game = window.requestAnimationFrame(() => render(instance)));
+		isGameRunning ? clearInterval(instance.game) : start();
 
 		isGameRunning = !isGameRunning;
 	}
