@@ -9,6 +9,9 @@ export const instance = {
 	FPS: 60,
 };
 
+export const TileSet = new Image();
+TileSet.src = "../../public/assets/TileSet.bmp";
+
 function start() {
 	instance.game = setInterval(() => {
 		window.requestAnimationFrame(() => render(instance));

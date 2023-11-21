@@ -1,7 +1,7 @@
 import { p, screen } from "./render.js";
 import { keyMap } from "./keymap.js";
 import { world } from "./world.js";
-import { instance } from "./main.js";
+import { TileSet } from "./main.js";
 
 export class PlayerClass {
 	vx = 0;
@@ -11,8 +11,8 @@ export class PlayerClass {
 	jumpHeight = -10;
 	acceleration = 0.2;
 	deacceleration = 0.25;
-	width = 64;
-	height = 64;
+	width = 32;
+	height = 32;
 	top = this.x;
 	right = this.x + this.width;
 	bottom = this.y + this.height;
@@ -62,23 +62,35 @@ export class PlayerClass {
 	}
 	changeSprite() {
 		//Checks for a full sprite step
+		Promise.all([
+			// Cut out two sprites from the sprite sheet
+			createImageBitmap(TileSet, 0, 0, 32, 32),
+			createImageBitmap(TileSet, 32, 0, 32, 32),
+			createImageBitmap(TileSet, 0, 32, 32, 32),
+			createImageBitmap(TileSet, 32, 32, 32, 32),
+		]).then((sprites) => {
+			// Draw each sprite onto the canvas
+			console.log(sprites);
+			this.spriteArray = sprites
+		});
+
 		if (this.renderStepCount >= 60 / this.spriteChangeRate) {
 			this.renderStepCount = 0;
 			this.spriteIndex++;
 			if (this.spriteIndex >= this.spriteArray.length) this.spriteIndex = 0;
 		}
-		this.color = this.spriteArray[this.spriteIndex];
+		this.sprite = this.spriteArray[this.spriteIndex];
 	}
-	render() {
+	async render() {
 		//Sprite logic
 		this.changeSprite();
 
 		//Render
-		p.fillStyle = this.color;
-		p.fillRect(this.x, this.y, this.width, this.height);
 
 		//StepCount for changing sprite
 		this.renderStepCount++;
+
+		p.drawImage(this.sprite, this.x, this.y);
 	}
 	calculateMovement() {
 		this.updateSides();
