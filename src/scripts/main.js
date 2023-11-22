@@ -6,7 +6,7 @@ export const instance = {
 	game: undefined,
 	isGameRunning: true,
 	world,
-	FPS: 60,
+	FPS: 75,
 };
 
 export const TileSet = new Image();

@@ -6,8 +6,10 @@ import { TileSet } from "./main.js";
 export class PlayerClass {
 	vx = 0;
 	vy = 0;
-	vxCap = 4;
+	vxCap = 100;
 	vyCap = 10;
+	walkingCap = 3;
+	runningCap = 8;
 	jumpHeight = -10;
 	acceleration = 0.2;
 	deacceleration = 0.25;
@@ -21,7 +23,7 @@ export class PlayerClass {
 	renderStepCount = 0;
 	spriteIndex = 0;
 	spriteArray = ["cyan", "blue", "lime", "yellow", "orange", "purple"];
-	spriteChangeRate = 3;
+	spriteChangeRate = 10 / 7;
 
 	constructor(x, y, color) {
 		this.x = x;
@@ -71,7 +73,7 @@ export class PlayerClass {
 		]).then((sprites) => {
 			// Draw each sprite onto the canvas
 			console.log(sprites);
-			this.spriteArray = sprites
+			this.spriteArray = sprites;
 		});
 
 		if (this.renderStepCount >= 60 / this.spriteChangeRate) {
@@ -95,7 +97,9 @@ export class PlayerClass {
 	calculateMovement() {
 		this.updateSides();
 
-		keyMap["shift"] ? (this.vxCap = 8) : (this.vxCap = 4);
+		keyMap["shift"]
+			? (this.vxCap = this.runningCap)
+			: (this.vxCap = this.walkingCap);
 
 		//Gravity
 		this.sumVy(world.gravity);
