@@ -9,15 +9,11 @@ export const instance = {
 	FPS: 75,
 };
 
-export const TileSet = new Image();
-TileSet.src = "../../public/assets/TileSet.bmp";
-
-function start() {
+export function start() {
 	instance.game = setInterval(() => {
 		window.requestAnimationFrame(() => render(instance));
 	}, 1000 / instance.FPS);
 }
-start();
 
 document.addEventListener("keydown", (e) => {
 	e.preventDefault();
