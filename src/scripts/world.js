@@ -1,5 +1,5 @@
-import { PlayerClass } from "./Player.js";
-import { WallClass } from "./Wall.js";
+import { PlayerClass } from "./classes/Player.js";
+import { WallClass } from "./classes/Wall.js";
 
 export const world = {
 	gravity: 0.3,

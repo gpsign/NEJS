@@ -15,7 +15,7 @@ function iterateTileSet() {
 	return promises;
 }
 
-Sprites.TileSet.src = "../../public/assets/testTiles.png";
+Sprites.TileSet.src = "../../public/assets/testTiles_2.png";
 Sprites.TileSet.image;
 Sprites.TileSet.onload = () => {
 	Promise.all(iterateTileSet()).then((sprites) => {

@@ -1,4 +1,4 @@
-import { p } from "./render.js";
+import { p } from "../render.js";
 
 export class WallClass {
 	constructor(x, y, width, height, color) {
