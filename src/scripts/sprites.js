@@ -7,15 +7,15 @@ export const Sprites = {
 
 function iterateTileSet() {
 	const promises = [];
-	for (let i = 0; i < Sprites.TileSet.height; i += 8) {
-		for (let j = 0; j < Sprites.TileSet.width; j += 8) {
-			promises.push(createImageBitmap(Sprites.TileSet, i, j, 8, 8));
+	for (let i = 0; i < Sprites.TileSet.height; i += 16) {
+		for (let j = 0; j < Sprites.TileSet.width; j += 16) {
+			promises.push(createImageBitmap(Sprites.TileSet, i, j, 16, 16));
 		}
 	}
 	return promises;
 }
 
-Sprites.TileSet.src = "../../public/assets/TileSet.bmp";
+Sprites.TileSet.src = "../../public/assets/testTiles.png";
 Sprites.TileSet.image;
 Sprites.TileSet.onload = () => {
 	Promise.all(iterateTileSet()).then((sprites) => {

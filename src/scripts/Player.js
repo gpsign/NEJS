@@ -13,8 +13,8 @@ export class PlayerClass {
 	jumpHeight = -10;
 	acceleration = 0.2;
 	deacceleration = 0.25;
-	width = 8;
-	height = 8;
+	width = 16;
+	height = 16;
 	top = this.x;
 	right = this.x + this.width;
 	bottom = this.y + this.height;
@@ -23,7 +23,7 @@ export class PlayerClass {
 	renderStepCount = 0;
 	spriteIndex = 0;
 	spriteArray = [];
-	spriteChangeRate = 10 / 7;
+	spriteChangeRate = 3;
 
 	constructor(x, y, color) {
 		this.x = x;

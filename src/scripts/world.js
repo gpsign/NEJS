@@ -2,7 +2,7 @@ import { PlayerClass } from "./Player.js";
 import { WallClass } from "./Wall.js";
 
 export const world = {
-	gravity: 0.25,
+	gravity: 0.3,
 	entities: [new PlayerClass(220, 220, "blue")],
 	walls: [
 		new WallClass(390, 300, 50, 160, "red"),

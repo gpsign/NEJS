@@ -6,7 +6,7 @@ export const instance = {
 	game: undefined,
 	isGameRunning: true,
 	world,
-	FPS: 75,
+	FPS: 60,
 };
 
 export function start() {
