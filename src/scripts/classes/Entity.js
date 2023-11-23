@@ -8,8 +8,6 @@ export class EntityClass {
 	vy = 0;
 	vxCap = 100;
 	vyCap = 10;
-	width = 16;
-	height = 16;
 	top = this.x;
 	right = this.x + this.width;
 	bottom = this.y + this.height;
@@ -20,10 +18,11 @@ export class EntityClass {
 	spriteArray = [];
 	spriteChangeRate = 3;
 
-	constructor(x, y, color) {
-		this.x = x;
-		this.y = y;
-		this.color = color;
+	constructor(xTile, yTile, width, height) {
+		this.x = 16 * xTile;
+		this.y = 16 * yTile;
+		this.width = 16 * width;
+		this.height = 16 * height;
 	}
 	updateSprite() {
 		if (this.spriteArray.length === 0) this.spriteArray = Sprites.array;
@@ -93,12 +92,12 @@ export class EntityClass {
 			this.futureBottom <= other.top + this.vy
 		) {
 			//Check for collision
-			if (this.futureBottom >= other.top && this.futureBottom <= other.bottom) return true;
+			if (this.futureBottom >= other.top && this.futureBottom <= other.bottom)
+				return true;
 			return false;
 		}
 	}
 	checkRightCollision(other) {
-        
 		//Check if its is on the right side of the other
 		if (
 			((this.futureTop >= other.top && this.futureTop <= other.bottom) ||
@@ -107,7 +106,6 @@ export class EntityClass {
 				(this.top <= other.top && this.bottom >= other.bottom)) &&
 			this.futureLeft > other.right + this.vx
 		) {
-            console.log(other)
 			//Check for collison
 			if (this.futureLeft <= other.right && this.futureLeft >= other.left)
 				return true;

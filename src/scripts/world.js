@@ -3,11 +3,10 @@ import { WallClass } from "./classes/Wall.js";
 
 export const world = {
 	gravity: 0.3,
-	entities: [new PlayerClass(220, 220, "blue")],
+	entities: [new PlayerClass(1, 3, 1, 1)],
 	walls: [
-		new WallClass(390, 300, 50, 160, "red"),
-		new WallClass(300, 140, 50, 200, "yellow"),
-		new WallClass(100, 360, 80, 30, "green"),
-		new WallClass(10, 230, 80, 30, "purple"),
+		new WallClass(0, 10, 5, 2, "red"),
+		new WallClass(11, 6, 5, 2, "yellow"),
+		new WallClass(11, 12, 1, 5, "green"),
 	],
 };
