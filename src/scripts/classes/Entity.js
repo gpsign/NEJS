@@ -1,28 +1,19 @@
 import { p, screen } from "../render.js";
-import { keyMap } from "../keymap.js";
-import { world } from "../world.js";
 import { Sprites } from "../sprites.js";
 
 export class EntityClass {
-	vx = 0;
-	vy = 0;
-	vxCap = 100;
-	vyCap = 10;
-	top = this.x;
-	right = this.x + this.width;
-	bottom = this.y + this.height;
-	left = this.y;
-	onGround = false;
-	renderStepCount = 0;
-	spriteIndex = 0;
 	spriteArray = [];
-	spriteChangeRate = 3;
 
-	constructor(xTile, yTile, width, height) {
-		this.x = 16 * xTile;
-		this.y = 16 * yTile;
-		this.width = 16 * width;
-		this.height = 16 * height;
+	constructor(xTile, yTile, width, height, spriteIndex) {
+		this.x = Sprites.size * xTile;
+		this.y = Sprites.size * yTile;
+		this.width = Sprites.size * width;
+		this.height = Sprites.size * height;
+		this.vy = 0;
+		this.vx = 0;
+		this.onGround = false;
+		this.renderStepCount = 0;
+		this.spriteIndex = spriteIndex;
 	}
 	updateSprite() {
 		if (this.spriteArray.length === 0) this.spriteArray = Sprites.array;
@@ -62,6 +53,8 @@ export class EntityClass {
 	}
 	changeSprite() {
 		this.updateSprite();
+		if (this.spriteChangeRate === 0)
+			return (this.sprite = this.spriteArray[this.spriteIndex]);
 
 		//Checks for a full sprite step
 		if (this.renderStepCount >= 60 / this.spriteChangeRate) {
@@ -75,13 +68,56 @@ export class EntityClass {
 		//Sprite logic
 		this.changeSprite();
 
+		
+
 		//StepCount for changing sprite
 		this.renderStepCount++;
 
 		//Render
-		p.drawImage(this.sprite, this.x, this.y);
+		for (let i = 0; i < this.height; i += Sprites.size)
+			for (let j = 0; j < this.width; j += Sprites.size)
+				p.drawImage(this.sprite, this.x + j, this.y + i);
 	}
-	checkColission(other) {}
+	screenColission() {
+		//Collides with ground
+		if (this.futureBottom > screen.height) {
+			this.onGround = true;
+			while (this.y + this.height < screen.height) this.y++;
+			this.vy = 0;
+		}
+
+		//Collides with right wall
+		if (this.futureRight > screen.width) {
+			while (this.x + this.width < screen.width - 1) this.x++;
+			this.vx = 0;
+		}
+
+		//Collides with left wall
+		if (this.futureLeft > screen.width || this.x + this.vx < 0) {
+			while (this.x > 1) this.x--;
+			this.vx = 0;
+		}
+	}
+	checkCollission(other) {
+		if (
+			this.checkTopCollision(other) ||
+			this.checkRightCollision(other) ||
+			this.checkBottomCollision(other) ||
+			this.checkLeftCollision(other)
+		)
+			return true;
+		return false;
+	}
+	checkSidesCollision(other) {
+		if (this.checkRightCollision(other) || this.checkLeftCollision(other))
+			return true;
+		return false;
+	}
+	checkTopAndDownCollision(other) {
+		if (this.checkTopCollision(other) || this.checkBottomCollision(other))
+			return true;
+		return false;
+	}
 	checkTopCollision(other) {
 		//Check if it is above the other
 		if (
@@ -92,8 +128,9 @@ export class EntityClass {
 			this.futureBottom <= other.top + this.vy
 		) {
 			//Check for collision
-			if (this.futureBottom >= other.top && this.futureBottom <= other.bottom)
+			if (this.futureBottom >= other.top && this.futureBottom <= other.bottom) {
 				return true;
+			}
 			return false;
 		}
 	}
