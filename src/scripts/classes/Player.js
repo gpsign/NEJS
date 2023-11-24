@@ -1,4 +1,5 @@
 import { keyMap } from "../keymap.js";
+import { heightRatio, widthRatio } from "../render.js";
 import { world } from "../world.js";
 import { EntityClass } from "./Entity.js";
 
@@ -7,14 +8,12 @@ export class PlayerClass extends EntityClass {
 		super(xTile, yTile, width, height, spriteIndex);
 		this.vx = 0;
 		this.vy = 0;
-		this.walkingCap = 2;
-		this.runningCap = 4 ;
-		this.jumpHeight = 6;
-		this.acceleration = 0.2;
-		this.deacceleration = 0.25;
+		this.walkingCap = 2 * widthRatio;
+		this.runningCap = 4 * widthRatio;
+		this.jumpHeight = 6 * heightRatio;
+		this.acceleration = 0.2 * widthRatio;
+		this.deacceleration = 0.25 * widthRatio;
 		this.spriteChangeRate = 0;
-		this.vyCap = 10;
-		this.vxCap = 4;
 	}
 	deaccelerate() {
 		if (this.vx > 0) this.sumVx(-this.deacceleration);
@@ -46,7 +45,7 @@ export class PlayerClass extends EntityClass {
 			: (this.vxCap = this.walkingCap);
 
 		//Gravity
-		this.sumVy(world.gravity);
+		this.sumVy(world.gravity * heightRatio);
 
 		//deaccelerates when not moving
 		if (!keyMap["a"] && !keyMap["d"]) this.deaccelerate();
@@ -75,6 +74,17 @@ export class PlayerClass extends EntityClass {
 
 		//Check for collisions
 		this.wallCollision();
+
+		for (let i = 1; i < world.entities.length; i++) {
+			if (world.entities[i] != undefined) {
+				if (this.checkTopCollision(world.entities[i])) {
+					this.sumVy(-10);
+					delete world.entities[i];
+				} else if (this.checkCollission(world.entities[i])) {
+					location.reload();
+				}
+			}
+		}
 
 		this.x += this.vx;
 		this.y += this.vy;

@@ -1,14 +1,14 @@
-import { p, screen } from "../render.js";
+import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
 
 export class EntityClass {
 	spriteArray = [];
 
 	constructor(xTile, yTile, width, height, spriteIndex) {
-		this.x = Sprites.size * xTile;
-		this.y = Sprites.size * yTile;
-		this.width = Sprites.size * width;
-		this.height = Sprites.size * height;
+		this.x = Sprites.size * xTile * widthRatio;
+		this.y = Sprites.size * yTile * heightRatio;
+		this.width = Sprites.size * width * widthRatio;
+		this.height = Sprites.size * height * heightRatio;
 		this.vy = 0;
 		this.vx = 0;
 		this.onGround = false;
@@ -68,15 +68,19 @@ export class EntityClass {
 		//Sprite logic
 		this.changeSprite();
 
-		
-
 		//StepCount for changing sprite
 		this.renderStepCount++;
 
 		//Render
-		for (let i = 0; i < this.height; i += Sprites.size)
-			for (let j = 0; j < this.width; j += Sprites.size)
-				p.drawImage(this.sprite, this.x + j, this.y + i);
+		for (let i = 0; i < this.height; i += Sprites.size * heightRatio)
+			for (let j = 0; j < this.width; j += Sprites.size * widthRatio)
+				p.drawImage(
+					this.sprite,
+					this.x + j,
+					this.y + i,
+					this.sprite.width * widthRatio,
+					this.sprite.height * heightRatio
+				);
 	}
 	screenColission() {
 		//Collides with ground
@@ -119,62 +123,89 @@ export class EntityClass {
 		return false;
 	}
 	checkTopCollision(other) {
+		other.updateSides();
 		//Check if it is above the other
 		if (
-			((this.futureRight >= other.left && this.futureRight <= other.right) ||
-				(this.futureLeft >= other.left && this.futureLeft <= other.right) ||
-				(this.futureLeft <= other.left && this.futureRight >= other.right) ||
-				(this.left <= other.left && this.right >= other.right)) &&
-			this.futureBottom <= other.top + this.vy
+			((this.futureRight >= other.futureLeft &&
+				this.futureRight <= other.futureRight) ||
+				(this.futureLeft >= other.futureLeft &&
+					this.futureLeft <= other.futureRight) ||
+				(this.futureLeft <= other.futureLeft &&
+					this.futureRight >= other.futureRight) ||
+				(this.left <= other.futureLeft && this.right >= other.futureRight)) &&
+			this.futureBottom <= other.futureTop + this.vy
 		) {
-			//Check for collision
-			if (this.futureBottom >= other.top && this.futureBottom <= other.bottom) {
+			//Check for colldision
+			if (
+				this.futureBottom >= other.futureTop &&
+				this.futureBottom <= other.futureBottom
+			) {
 				return true;
 			}
 			return false;
 		}
 	}
 	checkRightCollision(other) {
+		other.updateSides();
 		//Check if its is on the right side of the other
 		if (
-			((this.futureTop >= other.top && this.futureTop <= other.bottom) ||
-				(this.futureTop <= other.top && this.futureBottom >= other.bottom) ||
-				(this.futureBottom >= other.top && this.futureBottom <= other.bottom) ||
-				(this.top <= other.top && this.bottom >= other.bottom)) &&
-			this.futureLeft > other.right + this.vx
+			((this.futureTop >= other.futureTop &&
+				this.futureTop <= other.futureBottom) ||
+				(this.futureTop <= other.futureTop &&
+					this.futureBottom >= other.futureBottom) ||
+				(this.futureBottom >= other.futureTop &&
+					this.futureBottom <= other.futureBottom) ||
+				(this.top <= other.futureTop && this.bottom >= other.futureBottom)) &&
+			this.futureLeft > other.futureRight + this.vx
 		) {
 			//Check for collison
-			if (this.futureLeft <= other.right && this.futureLeft >= other.left)
+			if (
+				this.futureLeft <= other.futureRight &&
+				this.futureLeft >= other.futureLeft
+			)
 				return true;
 			return false;
 		}
 	}
 	checkBottomCollision(other) {
+		other.updateSides();
 		//Check if its is below the other
 		if (
-			((this.futureRight >= other.left && this.futureRight <= other.right) ||
-				(this.futureLeft >= other.left && this.futureLeft <= other.right) ||
-				(this.futureLeft <= other.left && this.futureRight >= other.right) ||
-				(this.left <= other.left && this.right >= other.right)) &&
-			this.futureTop >= other.bottom + this.vy
+			((this.futureRight >= other.futureLeft &&
+				this.futureRight <= other.futureRight) ||
+				(this.futureLeft >= other.futureLeft &&
+					this.futureLeft <= other.futureRight) ||
+				(this.futureLeft <= other.futureLeft &&
+					this.futureRight >= other.futureRight) ||
+				(this.left <= other.futureLeft && this.right >= other.futureRight)) &&
+			this.futureTop >= other.futureBottom + this.vy
 		) {
 			//Check for collision
-			if (this.futureTop <= other.bottom + 1 && this.futureTop >= other.top)
+			if (
+				this.futureTop <= other.futureBottom + 1 &&
+				this.futureTop >= other.futureTop
+			)
 				return true;
 			return false;
 		}
 	}
 	checkLeftCollision(other) {
+		other.updateSides();
 		//Check if its is on the left side of the other
 		if (
-			((this.futureTop >= other.top && this.futureTop <= other.bottom) ||
-				(this.futureTop <= other.top && this.futureBottom >= other.bottom) ||
-				(this.futureBottom >= other.top &&
-					this.futureBottom <= other.bottom)) &&
-			this.futureRight < other.left + this.vx
+			((this.futureTop >= other.futureTop &&
+				this.futureTop <= other.futureBottom) ||
+				(this.futureTop <= other.futureTop &&
+					this.futureBottom >= other.futureBottom) ||
+				(this.futureBottom >= other.futureTop &&
+					this.futureBottom <= other.futureBottom)) &&
+			this.futureRight < other.futureLeft + this.vx
 		) {
 			//Check for collison
-			if (this.futureRight <= other.right && this.futureRight >= other.left)
+			if (
+				this.futureRight <= other.futureRight &&
+				this.futureRight >= other.futureLeft
+			)
 				return true;
 			return false;
 		}
