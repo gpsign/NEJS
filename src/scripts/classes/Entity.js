@@ -1,6 +1,7 @@
 import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
 import { contains, lineOverlapse } from "../utils.js";
+import { world } from "../world.js";
 
 export class EntityClass {
 	spriteArray = [];
@@ -69,12 +70,16 @@ export class EntityClass {
 			this.sprite = this.spriteArray[this.spriteIndex];
 		}
 	}
-	async render() {
+	render() {
 		//Sprite logic
 		this.changeSprite();
+		this.updateSides();
 
 		//StepCount for changing sprite
 		this.renderStepCount++;
+
+		if (this.name != "player" && world.camera.moveEntities)
+			this.x -= world.camera.x;
 
 		//Render
 		for (let i = 0; i < this.height; i += Sprites.size * heightRatio)
@@ -93,12 +98,6 @@ export class EntityClass {
 			this.onGround = true;
 			this.y = screen.height - this.height;
 			this.vy = 0;
-		}
-
-		//Collides with right wall
-		if (this.FR + this.vx > screen.width) {
-			this.x = screen.width - this.width;
-			this.vx = 0;
 		}
 
 		//Collides with left wall
@@ -123,7 +122,6 @@ export class EntityClass {
 			return true;
 		return false;
 	}
-
 	checkTopCollision(other) {
 		//Check if it is above the other
 		if (

@@ -13,6 +13,7 @@ const heightRatio = 1;
 function render(instance) {
 	p.clearRect(0, 0, screen.width, screen.height);
 
+	instance.world.camera.calculateX();
 	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
 		entity.render();
