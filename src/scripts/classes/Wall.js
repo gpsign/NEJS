@@ -5,5 +5,6 @@ export class WallClass extends EntityClass {
 		super(xTile, yTile, width, height, spriteIndex);
 		this.updateSides();
 		this.spriteChangeRate = 0;
+		this.name = "wall";
 	}
 }

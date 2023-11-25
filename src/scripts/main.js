@@ -15,11 +15,21 @@ export function start() {
 	}, 1000 / instance.FPS);
 }
 
+function oneStep() {
+	window.requestAnimationFrame(() => render(instance));
+}
+
+function log() {
+	for (const entity of world.entities) console.log(entity);
+}
+
 document.addEventListener("keydown", (e) => {
 	e.preventDefault();
 	const key = e.key.toLowerCase();
 
 	if (key === "r") location.reload();
+	if (key === "." && !instance.isGameRunning) oneStep();
+	if (key === "l") log();
 
 	if (key === "enter") {
 		instance.isGameRunning ? clearInterval(instance.game) : start();

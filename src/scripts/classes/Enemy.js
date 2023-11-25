@@ -5,11 +5,12 @@ import { screen } from "../render.js";
 export class EnemyClass extends EntityClass {
 	constructor(xTile, yTile, width, height, spriteIndex) {
 		super(xTile, yTile, width, height);
-		this.vx = 1;
+		this.vx = 0.5;
 		this.vy = 0;
 		this.spriteIndex = spriteIndex;
 		this.spriteChangeRate = 0;
 		this.vyCap = 5;
+		this.name = 'enemy'
 	}
 	wallCollision() {
 		world.walls.forEach((wall) => {
@@ -38,7 +39,7 @@ export class EnemyClass extends EntityClass {
 
 		//Collides with right wall
 		if (this.futureRight > screen.width) {
-			while (this.x + this.width < screen.width - 1) this.x++;
+			while (this.x + this.width + this.vx < screen.width - 1) this.x++;
 			this.vx = -this.vx;
 		}
 

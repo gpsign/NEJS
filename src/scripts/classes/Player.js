@@ -8,12 +8,13 @@ export class PlayerClass extends EntityClass {
 		super(xTile, yTile, width, height, spriteIndex);
 		this.vx = 0;
 		this.vy = 0;
-		this.walkingCap = 2 * widthRatio;
+		this.walkingCap = 1 * widthRatio;
 		this.runningCap = 4 * widthRatio;
 		this.jumpHeight = 6 * heightRatio;
-		this.acceleration = 0.2 * widthRatio;
+		this.acceleration = 0.15 * widthRatio;
 		this.deacceleration = 0.25 * widthRatio;
 		this.spriteChangeRate = 0;
+		this.name = "player";
 	}
 	deaccelerate() {
 		if (this.vx > 0) this.sumVx(-this.deacceleration);
@@ -75,18 +76,21 @@ export class PlayerClass extends EntityClass {
 		//Check for collisions
 		this.wallCollision();
 
-		for (let i = 1; i < world.entities.length; i++) {
-			if (world.entities[i] != undefined) {
-				if (this.checkTopCollision(world.entities[i])) {
-					this.sumVy(-10);
-					delete world.entities[i];
-				} else if (this.checkCollission(world.entities[i])) {
-					location.reload();
-				}
+		for (let i = 0; i < world.entities.length; i++) {
+			if (world.entities[i] != undefined && world.entities[i] != this) {
+				const collided = this.checkCollission(world.entities[i]);
+
+				if (collided)
+					if (collided === "top") {
+						this.vy = -3;
+						delete world.entities[i];
+					} else {
+						location.reload();
+					}
 			}
 		}
 
-		this.x += this.vx;
-		this.y += this.vy;
+		this.x += Math.round(this.vx);
+		this.y += Math.round(this.vy);
 	}
 }
