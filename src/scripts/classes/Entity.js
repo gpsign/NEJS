@@ -78,9 +78,6 @@ export class EntityClass {
 		//StepCount for changing sprite
 		this.renderStepCount++;
 
-		if (this.name != "player" && world.camera.moveEntities)
-			this.x -= world.camera.x;
-
 		//Render
 		for (let i = 0; i < this.height; i += Sprites.size * heightRatio)
 			for (let j = 0; j < this.width; j += Sprites.size * widthRatio)
@@ -96,6 +93,7 @@ export class EntityClass {
 		//Collides with ground
 		if (this.FB > screen.height) {
 			this.onGround = true;
+			D;
 			this.y = screen.height - this.height;
 			this.vy = 0;
 		}
@@ -103,6 +101,12 @@ export class EntityClass {
 		//Collides with left wall
 		if (this.FL > screen.width || this.x + this.vx < 0) {
 			this.x = 0;
+			this.vx = 0;
+		}
+
+		//Collides with right wall
+		if (this.FR > screen.width) {
+			this.x = screen.width - this.width;
 			this.vx = 0;
 		}
 	}

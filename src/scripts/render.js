@@ -1,3 +1,5 @@
+import TileClass from "./classes/Tile.js";
+
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
 
@@ -13,7 +15,6 @@ const heightRatio = 1;
 function render(instance) {
 	p.clearRect(0, 0, screen.width, screen.height);
 
-	instance.world.camera.calculateX();
 	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
 		entity.render();
@@ -22,6 +23,10 @@ function render(instance) {
 	instance.world.walls.forEach((walls) => {
 		walls.render();
 	});
+	test.render(p);
 }
+
+const test = new TileClass(p, 1, 1);
+
 
 export { render, p, screen, widthRatio, heightRatio };

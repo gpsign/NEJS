@@ -1,3 +1,4 @@
+import TilesetClass from "./classes/Tileset.js";
 import { start } from "./main.js";
 
 export const Sprites = {
@@ -40,3 +41,5 @@ Sprites.TileSet.onload = () => {
 		start();
 	});
 };
+
+const Tileset = new TilesetClass();
