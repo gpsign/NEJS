@@ -24,3 +24,19 @@ export function lineOverlapse(...args) {
 	}
 	return result;
 }
+
+export function unfold(array) {
+	const aux = [];
+	if (!array.push) return;
+
+	function recursion(refArray) {
+		refArray.forEach((value) => {
+			if (value.push) recursion(value);
+			else aux.push(value);
+		});
+	}
+
+	recursion(array);
+
+	return aux;
+}
