@@ -1,6 +1,6 @@
 import TileClass from "./classes/Tile.js";
-import ColorClass from "./classes/Color.js";
 import PalleteClass from "./classes/Pallette.js";
+import ColorClass from "./classes/Color.js";
 
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
@@ -25,26 +25,28 @@ function render(instance) {
 	instance.world.walls.forEach((walls) => {
 		walls.render();
 	});
-	test.render(p);
+
+	testTile.render(p);
 }
 
-const ye = new ColorClass("ye", 255, 255, 0, 255);
-const br = new ColorClass("br", 165, 42, 42);
-const bl = new ColorClass("bl");
+const pallette = new PalleteClass(
+	new ColorClass("transparent", 0, 0, 0, 0),
+	new ColorClass("pink", 251, 208, 194),
+	new ColorClass("brown", 153, 78, 5),
+	new ColorClass("black", 0, 0, 0)
+);
 
-const smile = [
-	[2, 2, 2, 2, 2, 2, 2, 2],
+const brick = [
+	[1, 1, 1, 1, 1, 1, 1, 1],
+	[2, 2, 2, 2, 2, 2, 2, 3],
 	[3, 3, 3, 3, 3, 3, 3, 3],
-	[3, 3, 1, 3, 3, 1, 3, 3],
-	[3, 3, 1, 3, 3, 1, 3, 3],
-	[3, 2, 3, 3, 3, 3, 1, 3],
+	[2, 2, 2, 2, 3, 2, 2, 2],
+	[2, 2, 2, 2, 3, 2, 2, 2],
 	[3, 3, 3, 3, 3, 3, 3, 3],
-	[3, 3, 3, 3, 3, 3, 3, 3],
-	[3, 3, 3, 3, 3, 3, 3, 3],
+	[2, 2, 3, 2, 2, 2, 2, 2],
+	[2, 2, 3, 2, 2, 2, 2, 2],
 ];
 
-const pallete = new PalleteClass(bl, bl, br, ye);
-
-const test = new TileClass(p, smile, pallete);
+const testTile = new TileClass(p, brick, pallette);
 
 export { render, p, screen, widthRatio, heightRatio };
