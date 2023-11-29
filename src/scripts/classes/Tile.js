@@ -30,22 +30,21 @@ export default class TileClass {
 	}
 	mirror() {
 		const aux = this.sprite.data;
-		const unfoldedData = unfold(this.data);
-		
 
-		let bitCounter = 256;
+		const mirrorData = this.data.map((line) => line.reverse());
+		const unfoldedData = unfold(mirrorData);
 
-		for (let i = unfoldedData.length - 1; i >= 0; i--) {
+		let bitCounter = 0;
+
+		for (let i = 0; i < unfoldedData.length; i++) {
 			const pData = unfoldedData[i];
 			const color = this.pallete.data[pData];
-
-			console.log(color)
 
 			aux[bitCounter] = color.r;
 			aux[bitCounter + 1] = color.g;
 			aux[bitCounter + 2] = color.b;
 			aux[bitCounter + 3] = color.a;
-			bitCounter -= 4;
+			bitCounter += 4;
 		}
 
 		this.sprite.data.set(aux);
