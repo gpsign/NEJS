@@ -1,13 +1,14 @@
 import { unfold } from "../utils.js";
 
 export default class TileClass {
-	constructor(p, data, pallete) {
+	constructor(p, CHR, pallete) {
 		this.sprite = p.createImageData(8, 8);
 		this.pallete = pallete;
-		this.data = data;
+		this.data = CHR;
+		this.p = p;
 
 		const aux = this.sprite.data;
-		const unfoldedData = unfold(data);
+		const unfoldedData = unfold(CHR);
 
 		let bitCounter = 0;
 
@@ -22,11 +23,10 @@ export default class TileClass {
 			bitCounter += 4;
 		}
 
-		console.log(bitCounter);
 		this.sprite.data.set(aux);
 	}
-	render(p) {
-		p.putImageData(this.sprite, 133, 153);
+	render(x, y) {
+		this.p.putImageData(this.sprite, x, y);
 	}
 	mirror() {
 		const aux = this.sprite.data;
