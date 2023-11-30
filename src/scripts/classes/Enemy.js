@@ -1,11 +1,11 @@
 import { world } from "../world.js";
 import { EntityClass } from "./Entity.js";
-import { screen } from "../render.js";
+import { screen, widthRatio } from "../render.js";
 
 export class EnemyClass extends EntityClass {
 	constructor(xTile, yTile, width, height, spriteIndex) {
 		super(xTile, yTile, width, height);
-		this.vx = 0.5;
+		this.vx = 0.5 * widthRatio;
 		this.vy = 0;
 		this.spriteIndex = spriteIndex;
 		this.spriteChangeRate = 0;

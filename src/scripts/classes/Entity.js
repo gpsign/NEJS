@@ -7,10 +7,10 @@ export class EntityClass {
 	spriteArray = [];
 
 	constructor(xTile, yTile, width, height, spriteIndex) {
-		this.x = Sprites.size * xTile * widthRatio;
-		this.y = Sprites.size * yTile * heightRatio;
-		this.width = Sprites.size * width * widthRatio;
-		this.height = Sprites.size * height * heightRatio;
+		this.x = Sprites.tileSize * xTile * widthRatio;
+		this.y = Sprites.tileSize * yTile * heightRatio;
+		this.width = Sprites.tileSize * width * widthRatio;
+		this.height = Sprites.tileSize * height * heightRatio;
 		this.vy = 0;
 		this.vx = 0;
 		this.onGround = false;
@@ -79,8 +79,8 @@ export class EntityClass {
 		this.renderStepCount++;
 
 		//Render
-		for (let i = 0; i < this.height; i += Sprites.size * heightRatio)
-			for (let j = 0; j < this.width; j += Sprites.size * widthRatio)
+		for (let i = 0; i < this.height; i += Sprites.tileSize * heightRatio)
+			for (let j = 0; j < this.width; j += Sprites.tileSize * widthRatio)
 				p.drawImage(
 					this.sprite,
 					this.x + j,

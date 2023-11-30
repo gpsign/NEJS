@@ -1,27 +1,38 @@
+import { heightRatio, widthRatio } from "../render.js";
+import { Sprites } from "../sprites.js";
 import { unfold } from "../utils.js";
 
 export default class TileClass {
 	constructor(p, CHR, pallete) {
-		this.sprite = p.createImageData(8, 8);
+		this.sprite = p.createImageData(
+			Sprites.size * widthRatio,
+			Sprites.size * heightRatio
+		);
 		this.pallete = pallete;
 		this.data = CHR;
 		this.p = p;
 
 		const aux = this.sprite.data;
+
 		const unfoldedData = unfold(CHR);
 
 		let bitCounter = 0;
 
 		for (let i = 0; i < unfoldedData.length; i++) {
-			const pData = unfoldedData[i];
-			const color = pallete.data[pData];
+			for (let j = 0; j < heightRatio; j++) {
+				const pData = unfoldedData[i];
+				const color = pallete.data[pData];
 
-			aux[bitCounter] = color.r;
-			aux[bitCounter + 1] = color.g;
-			aux[bitCounter + 2] = color.b;
-			aux[bitCounter + 3] = color.a;
-			bitCounter += 4;
+				aux[bitCounter] = color.r;
+				aux[bitCounter + 1] = color.g;
+				aux[bitCounter + 2] = color.b;
+				aux[bitCounter + 3] = color.a;
+
+				bitCounter += 4;
+			}
 		}
+
+		console.log(unfoldedData);
 
 		this.sprite.data.set(aux);
 	}

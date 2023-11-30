@@ -9,11 +9,8 @@ const p = screen.getContext("2d");
 const NESWidth = 256;
 const NESHeight = 240;
 
-//const widthRatio = screen.width / NESWidth;
-//const heightRatio = screen.height / NESHeight;
-
-const widthRatio = 1;
-const heightRatio = 1;
+const widthRatio = screen.width / NESWidth;
+const heightRatio = screen.height / NESHeight;
 
 function render(instance) {
 	p.clearRect(0, 0, screen.width, screen.height);
@@ -27,7 +24,7 @@ function render(instance) {
 		walls.render();
 	});
 
-	testMegaTile.render(10 * 16, 8 * 16);
+	testMegaTile.render(12 * 16, 8 * 16);
 }
 
 const pallette_one = new PalleteClass(

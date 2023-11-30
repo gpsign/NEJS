@@ -6,7 +6,8 @@ import { start } from "./main.js";
 export const Sprites = {
 	TileSet: new Image(),
 	array: [],
-	size: 16,
+	size: 8,
+	tileSize: 8 * 2,
 };
 
 function iterateTileSet() {
@@ -14,20 +15,20 @@ function iterateTileSet() {
 	for (
 		let tileLine = 0;
 		tileLine < Sprites.TileSet.height;
-		tileLine += Sprites.size
+		tileLine += Sprites.tileSize
 	) {
 		for (
 			let tileColumn = 0;
 			tileColumn < Sprites.TileSet.width;
-			tileColumn += Sprites.size
+			tileColumn += Sprites.tileSize
 		) {
 			promises.push(
 				createImageBitmap(
 					Sprites.TileSet,
 					tileColumn,
 					tileLine,
-					Sprites.size,
-					Sprites.size
+					Sprites.tileSize,
+					Sprites.tileSize
 				)
 			);
 		}
