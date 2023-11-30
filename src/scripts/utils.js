@@ -40,3 +40,11 @@ export function unfold(array) {
 
 	return aux;
 }
+
+export function repeat(array, num) {
+	const aux = [];
+
+	for (let i = 0; i < num; i++)
+		for (let j = 0; j < array.length; j++) aux.push(array[j]);
+	return aux;
+}

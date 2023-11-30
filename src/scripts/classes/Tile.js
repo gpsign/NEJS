@@ -1,6 +1,6 @@
 import { heightRatio, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
-import { unfold } from "../utils.js";
+import { unfold, repeat } from "../utils.js";
 
 export default class TileClass {
 	constructor(p, CHR, pallete) {
@@ -13,8 +13,14 @@ export default class TileClass {
 		this.p = p;
 
 		const aux = this.sprite.data;
+		const scaledLines = repeat(CHR, heightRatio);
+		const scaledCHR = [];
 
-		const unfoldedData = unfold(CHR);
+		for (let i = 0; i < scaledLines.length; i++) {
+			scaledCHR.push(repeat(scaledLines[i], widthRatio));
+		}
+
+		const unfoldedData = unfold(scaledCHR);
 
 		let bitCounter = 0;
 
@@ -31,8 +37,6 @@ export default class TileClass {
 				bitCounter += 4;
 			}
 		}
-
-		console.log(unfoldedData);
 
 		this.sprite.data.set(aux);
 	}
