@@ -1,5 +1,5 @@
 import ColorClass from "./classes/Color.js";
-import PalleteClass from "./classes/Pallette.js";
+import PalleteClass from "./classes/Palette.js";
 import TilesetClass from "./classes/Tileset.js";
 import { start } from "./main.js";
 

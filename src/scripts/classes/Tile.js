@@ -4,6 +4,7 @@ import { unfold, repeat } from "../utils.js";
 
 export default class TileClass {
 	constructor(p, CHR, pallete) {
+		this.size = Sprites.size;
 		this.sprite = p.createImageData(
 			Sprites.size * widthRatio,
 			Sprites.size * heightRatio
