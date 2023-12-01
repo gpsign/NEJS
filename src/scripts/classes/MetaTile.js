@@ -1,7 +1,7 @@
 import { heightRatio, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
 
-export default class MegaTile {
+export default class MetaTileClass {
 	constructor(tiles) {
 		if (!tiles.push) this.tiles = [tiles, tiles, tiles, tiles];
 		else this.tiles = tiles;

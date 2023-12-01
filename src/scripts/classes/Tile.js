@@ -9,7 +9,6 @@ export default class TileClass {
 			Sprites.size * heightRatio
 		);
 		this.pallete = pallete;
-		this.data = CHR;
 		this.p = p;
 
 		const aux = this.sprite.data;
@@ -19,6 +18,8 @@ export default class TileClass {
 		for (let i = 0; i < scaledLines.length; i++) {
 			scaledCHR.push(repeat(scaledLines[i], widthRatio));
 		}
+
+		this.CHR = scaledCHR;
 
 		const unfoldedData = unfold(scaledCHR);
 
@@ -46,7 +47,7 @@ export default class TileClass {
 	mirror() {
 		const aux = this.sprite.data;
 
-		const mirrorData = this.data.map((line) => line.reverse());
+		const mirrorData = this.CHR.map((line) => line.reverse());
 		const unfoldedData = unfold(mirrorData);
 
 		let bitCounter = 0;
