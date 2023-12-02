@@ -41,10 +41,34 @@ export function unfold(array) {
 	return aux;
 }
 
-export function repeat(array, num) {
+export function repeat(fun, num) {
+	for (let i = 0; i < num; i++) fun();
+}
+
+export function repeatArrayValues(array, num) {
 	const aux = [];
 
-	for (let i = 0; i < num; i++)
-		for (let j = 0; j < array.length; j++) aux.push(array[j]);
+	for (let i = 0; i < num; i++) {
+		for (let j = 0; j < array.length; j++) {
+			aux.push(array[j]);
+		}
+	}
 	return aux;
+}
+
+export function scaleMatrice(matrice, xRatio = 1, yRatio = 1) {
+	const scaledLines = repeatArrayValues(matrice, yRatio);
+	const scaledColumns = [];
+
+	for (let i = 0; i < scaledLines.length; i++)
+		scaledColumns.push(repeatArrayValues(scaledLines[i], xRatio));
+
+	return scaledColumns;
+}
+
+export function isValid(...args) {
+	args.forEach((value) => {
+		if (value === undefined || value === null || value === "") return false;
+	});
+	return true;
 }

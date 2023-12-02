@@ -1,3 +1,4 @@
+import MetaTileClass from "../classes/MetaTile.js";
 import TileClass from "../classes/Tile.js";
 
 const ground_one = [
