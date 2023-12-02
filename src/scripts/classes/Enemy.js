@@ -1,6 +1,10 @@
 import { world } from "../world.js";
 import { EntityClass } from "./Entity.js";
-import { screen, widthRatio } from "../render.js";
+import { goomba, p, screen, widthRatio } from "../render.js";
+import goombaSprite from "../sprites/goomba.js";
+import palettes from "../sprites/palettes.js";
+import TileClass from "./Tile.js";
+import { isValid } from "../utils.js";
 
 export class EnemyClass extends EntityClass {
 	constructor(xTile, yTile, width, height, spriteIndex) {
@@ -10,7 +14,7 @@ export class EnemyClass extends EntityClass {
 		this.spriteIndex = spriteIndex;
 		this.spriteChangeRate = 0;
 		this.vyCap = 5;
-		this.name = 'enemy'
+		this.name = "enemy";
 	}
 	wallCollision() {
 		world.walls.forEach((wall) => {
@@ -50,6 +54,7 @@ export class EnemyClass extends EntityClass {
 		}
 	}
 	calculateMovement() {
+		this.newSprite = goomba;
 		this.updateSides();
 		this.sumVy(world.gravity);
 

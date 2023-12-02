@@ -67,8 +67,23 @@ export function scaleMatrice(matrice, xRatio = 1, yRatio = 1) {
 }
 
 export function isValid(...args) {
-	args.forEach((value) => {
-		if (value === undefined || value === null || value === "") return false;
-	});
+	for (let i = 0; i < args.length; i++) {
+		const value = args[i];
+
+		if (
+			value === undefined ||
+			value === null ||
+			value === "" ||
+			value.length < 1
+		)
+			return false;
+		// if (value.push && recursive) {
+		// 	return value.forEach((childValue) => isValid(childValue));
+		// }
+		// if (typeof value === "object" && recursive) {
+		// 	return isValid(Object.entries(value));
+		// }
+	}
+
 	return true;
 }

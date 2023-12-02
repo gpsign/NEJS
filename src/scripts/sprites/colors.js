@@ -7,6 +7,7 @@ const colors = {
 	black: new ColorClass(0, 0, 0),
 	lightblue: new ColorClass(164, 229, 252),
 	blue: new ColorClass(38, 123, 139),
+	darkblue: new ColorClass(0, 64, 88),
 };
 
 export default colors;

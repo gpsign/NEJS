@@ -51,14 +51,16 @@ export default class TileClass {
 		let bitCounter = 0;
 
 		for (let i = 0; i < unfoldedData.length; i++) {
-			const pData = unfoldedData[i];
-			const color = this.pallete.data[pData];
+			for (let j = 0; j < widthRatio; j++) {
+				const pData = unfoldedData[i];
+				const color = this.pallete.data[pData];
 
-			aux[bitCounter] = color.r;
-			aux[bitCounter + 1] = color.g;
-			aux[bitCounter + 2] = color.b;
-			aux[bitCounter + 3] = color.a;
-			bitCounter += 4;
+				aux[bitCounter] = color.r;
+				aux[bitCounter + 1] = color.g;
+				aux[bitCounter + 2] = color.b;
+				aux[bitCounter + 3] = color.a;
+				bitCounter += 4;
+			}
 		}
 
 		this.sprite.data.set(aux);

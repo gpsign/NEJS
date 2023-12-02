@@ -9,6 +9,12 @@ const palettes = [
 		colors.blue,
 		colors.black
 	),
+	new PaletteClass(
+		colors.transparent,
+		colors.lightblue,
+		colors.blue,
+		colors.darkblue
+	),
 ];
 
 export default palettes;

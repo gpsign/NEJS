@@ -2,6 +2,8 @@ import MetaTileClass from "./classes/MetaTile.js";
 import brickSprite from "./sprites/brick.js";
 import groundSprite from "./sprites/ground.js";
 import palettes from "./sprites/palettes.js";
+import TileClass from "./classes/Tile.js";
+import goombaSprite from "./sprites/goomba.js";
 
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
@@ -32,6 +34,7 @@ function render(instance) {
 const brick = brickSprite(p, palettes[1]);
 const brickMetaTile = new MetaTileClass(brick);
 const brickSquare = new MetaTileClass(brickMetaTile, 4, 1);
+const goomba = new MetaTileClass(goombaSprite(p, palettes[2]));
 
 const ground = groundSprite(p, palettes[1]);
 const groundMetaTile = new MetaTileClass(ground);
@@ -76,4 +79,4 @@ const brickSquareArray = [
 	new MetaTileClass(brickMetaTile, 9, 8),
 ];
 
-export { render, p, screen, widthRatio, heightRatio };
+export { render, p, screen, widthRatio, heightRatio, goomba };

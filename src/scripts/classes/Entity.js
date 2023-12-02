@@ -1,6 +1,6 @@
 import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
-import { contains, lineOverlapse } from "../utils.js";
+import { contains, isValid, lineOverlapse } from "../utils.js";
 import { world } from "../world.js";
 
 export class EntityClass {
@@ -79,21 +79,28 @@ export class EntityClass {
 		this.renderStepCount++;
 
 		//Render
-		for (let i = 0; i < this.height; i += Sprites.tileSize * heightRatio)
-			for (let j = 0; j < this.width; j += Sprites.tileSize * widthRatio)
-				p.drawImage(
-					this.sprite,
-					this.x + j,
-					this.y + i,
-					this.sprite.width * widthRatio,
-					this.sprite.height * heightRatio
-				);
+
+		if (!isValid(this.newSprite))
+			for (let i = 0; i < this.height; i += Sprites.tileSize * heightRatio)
+				for (let j = 0; j < this.width; j += Sprites.tileSize * widthRatio)
+					p.drawImage(
+						this.sprite,
+						this.x + j,
+						this.y + i,
+						this.sprite.width * widthRatio,
+						this.sprite.height * heightRatio
+					);
+		else {
+			this.newSprite.xPosition = this.x;
+			this.newSprite.yPosition = this.y;
+			this.newSprite.positionTiles()
+			this.newSprite.render()
+		}
 	}
 	screenColission() {
 		//Collides with ground
 		if (this.FB > screen.height) {
 			this.onGround = true;
-			D;
 			this.y = screen.height - this.height;
 			this.vy = 0;
 		}
