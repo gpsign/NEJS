@@ -1,7 +1,8 @@
 import ColorClass from "./classes/Color.js";
 import PalleteClass from "./classes/Palette.js";
 import TilesetClass from "./classes/Tileset.js";
-import { start } from "./main.js";
+import { instance, start } from "./main.js";
+import config from "../config.js";
 
 export const Sprites = {
 	TileSet: new Image(),
@@ -41,6 +42,6 @@ Sprites.TileSet.image;
 Sprites.TileSet.onload = () => {
 	Promise.all(iterateTileSet()).then((sprites) => {
 		Sprites.array = sprites;
-		start();
+		if (!config.editorMode) start();
 	});
 };

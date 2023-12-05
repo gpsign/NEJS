@@ -2,11 +2,23 @@ import MetaTileClass from "./classes/MetaTile.js";
 import brickSprite from "./sprites/brick.js";
 import groundSprite from "./sprites/ground.js";
 import palettes from "./sprites/palettes.js";
-import TileClass from "./classes/Tile.js";
 import goombaSprite from "./sprites/goomba.js";
+import config from "../config.js";
+import { repeat } from "./utils.js";
 
+const editor = document.getElementById("editor");
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
+
+if (config.editorMode) {
+	screen.style.display = "none";
+
+	repeat(() => {
+		const pixel = document.createElement("div");
+		pixel.classList.add("pixel");
+		editor.appendChild(pixel);
+	}, 64);
+}
 
 const NESWidth = 256;
 const NESHeight = 240;

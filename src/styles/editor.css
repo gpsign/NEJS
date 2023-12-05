@@ -1,0 +1,11 @@
+#editor {
+	border: 1px solid white;
+	display: grid;
+	grid-template-columns: repeat(8, 25px);
+}
+
+.pixel {
+	width: 25px;
+	height: 25px;
+	border: 1px solid white;
+}
