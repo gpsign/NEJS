@@ -5,17 +5,35 @@ import palettes from "./sprites/palettes.js";
 import goombaSprite from "./sprites/goomba.js";
 import config from "../config.js";
 import { repeat } from "./utils.js";
+import colors from "./sprites/colors.js";
 
+const palette = document.getElementById("color-palette");
 const editor = document.getElementById("editor");
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
 
+let cursorColor = {};
+
 if (config.editorMode) {
 	screen.style.display = "none";
+
+	for (const [key, value] of Object.entries(colors)) {
+		const paint = document.createElement("div");
+		paint.classList.add("color");
+		paint.style.backgroundColor = `rgba(${value.r}, ${value.g}, ${value.b}, ${value.a})`;
+		paint.onclick = () => {
+			cursorColor = value;
+		};
+
+		palette.appendChild(paint);
+	}
 
 	repeat(() => {
 		const pixel = document.createElement("div");
 		pixel.classList.add("pixel");
+		pixel.onclick = () => {
+			pixel.style.backgroundColor = `rgba(${cursorColor.r}, ${cursorColor.g}, ${cursorColor.b}, ${cursorColor.a})`;
+		};
 		editor.appendChild(pixel);
 	}, 64);
 }
