@@ -1,3 +1,4 @@
+import applyConfig from "./applyConfigs.js";
 import { keyMap } from "./keymap.js";
 import { render } from "./render.js";
 import { world } from "./world.js";
@@ -43,3 +44,5 @@ document.addEventListener("keyup", (e) => {
 	const key = e.key.toLowerCase();
 	keyMap[key] = false;
 });
+
+applyConfig();
