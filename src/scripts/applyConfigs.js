@@ -1,4 +1,4 @@
-import config from "../config.js";
+import config from "./config.js";
 import { screen } from "./render.js";
 import { createPaintArea, createPalette, editor } from "./editor/render.js";
 

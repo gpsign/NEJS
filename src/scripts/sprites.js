@@ -2,7 +2,7 @@ import ColorClass from "./classes/Color.js";
 import PalleteClass from "./classes/Palette.js";
 import TilesetClass from "./classes/Tileset.js";
 import { instance, start } from "./main.js";
-import config from "../config.js";
+import config from "./config.js";
 
 export const Sprites = {
 	TileSet: new Image(),

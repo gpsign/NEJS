@@ -1,4 +1,4 @@
 const config = {
-	editorMode: true,
+	editorMode: false,
 };
 export default config;
