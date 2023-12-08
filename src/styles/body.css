@@ -17,8 +17,8 @@ body {
 	);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#414141",endColorstr="#282828",GradientType=1);
 
-    width: 100vw;
-    height: 100vh;
+	width: 100vw;
+	height: 100vh;
 
 	display: flex;
 	flex-direction: column;
@@ -28,7 +28,11 @@ body {
 
 #debug {
 	color: white;
-	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 	padding: 0px 50px;
 }
 
+#debug * {
+	height: fit-content;
+	margin: 2px;
+}

@@ -1,6 +1,12 @@
 import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
-import { contains, isValid, lineOverlapse } from "../utils.js";
+import {
+	contains,
+	createDebugItem,
+	createDebugList,
+	isValid,
+	lineOverlapse,
+} from "../utils.js";
 import { world } from "../world.js";
 
 export class EntityClass {
@@ -22,15 +28,14 @@ export class EntityClass {
 		const debug = document.getElementById("debug");
 		let thisDebug = document.getElementById(this.name);
 
-		if (!thisDebug) {
-			thisDebug = document.createElement("div");
-			thisDebug.id = this.name;
-			thisDebug.innerHTML = this.x;
-			debug.appendChild(thisDebug);
-		}
-		else {
-			thisDebug.innerHTML = this.x;
-		}
+		if (thisDebug.parentNode) {
+			thisDebug.parentNode.removeChild(thisDebug);
+		  }
+
+		const entries = Object.entries(this);
+
+		thisDebug = createDebugList(this.name, entries);
+		debug.appendChild(thisDebug);
 	}
 	updateSprite() {
 		if (this.spriteArray.length === 0) this.spriteArray = Sprites.array;
