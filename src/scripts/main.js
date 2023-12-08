@@ -20,10 +20,6 @@ function oneStep() {
 	window.requestAnimationFrame(() => render(instance));
 }
 
-function log() {
-	for (const entity of world.entities) console.log(entity);
-}
-
 document.addEventListener("keydown", (e) => {
 	e.preventDefault();
 	const key = e.key.toLowerCase();

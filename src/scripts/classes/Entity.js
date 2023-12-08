@@ -6,7 +6,7 @@ import { world } from "../world.js";
 export class EntityClass {
 	spriteArray = [];
 
-	constructor(xTile, yTile, width, height, spriteIndex) {
+	constructor(xTile, yTile, width, height, spriteIndex, name = "") {
 		this.x = Sprites.tileSize * xTile * widthRatio;
 		this.y = Sprites.tileSize * yTile * heightRatio;
 		this.width = Sprites.tileSize * width * widthRatio;
@@ -16,6 +16,21 @@ export class EntityClass {
 		this.onGround = false;
 		this.renderStepCount = 0;
 		this.spriteIndex = spriteIndex;
+		this.name = name;
+	}
+	log() {
+		const debug = document.getElementById("debug");
+		let thisDebug = document.getElementById(this.name);
+
+		if (!thisDebug) {
+			thisDebug = document.createElement("div");
+			thisDebug.id = this.name;
+			thisDebug.innerHTML = this.x;
+			debug.appendChild(thisDebug);
+		}
+		else {
+			thisDebug.innerHTML = this.x;
+		}
 	}
 	updateSprite() {
 		if (this.spriteArray.length === 0) this.spriteArray = Sprites.array;
@@ -93,8 +108,8 @@ export class EntityClass {
 		else {
 			this.newSprite.xPosition = this.x;
 			this.newSprite.yPosition = this.y;
-			this.newSprite.positionTiles()
-			this.newSprite.render()
+			this.newSprite.positionTiles();
+			this.newSprite.render();
 		}
 	}
 	screenColission() {

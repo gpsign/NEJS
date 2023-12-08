@@ -4,8 +4,8 @@ import { world } from "../world.js";
 import { EntityClass } from "./Entity.js";
 
 export class PlayerClass extends EntityClass {
-	constructor(xTile, yTile, width, height, spriteIndex) {
-		super(xTile, yTile, width, height, spriteIndex);
+	constructor(xTile, yTile, width, height, spriteIndex, name = "") {
+		super(xTile, yTile, width, height, spriteIndex, name);
 		this.vx = 0;
 		this.vy = 0;
 		this.walkingCap = 1 * widthRatio;
@@ -14,7 +14,6 @@ export class PlayerClass extends EntityClass {
 		this.acceleration = 0.15 * widthRatio;
 		this.deacceleration = 0.25 * widthRatio;
 		this.spriteChangeRate = 0;
-		this.name = "player";
 	}
 	deaccelerate() {
 		if (this.vx > 0) this.sumVx(-this.deacceleration);

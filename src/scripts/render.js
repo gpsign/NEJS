@@ -19,6 +19,7 @@ function render(instance) {
 	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
 		entity.render();
+		entity.log();
 	});
 
 	instance.world.walls.forEach((walls) => {
