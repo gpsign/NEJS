@@ -8,11 +8,11 @@ export class PlayerClass extends EntityClass {
 		super(xTile, yTile, width, height, spriteIndex, name);
 		this.vx = 0;
 		this.vy = 0;
-		this.walkingCap = 1 * widthRatio;
-		this.runningCap = 4 * widthRatio;
-		this.jumpHeight = 6 * heightRatio;
-		this.acceleration = 0.15 * widthRatio;
-		this.deacceleration = 0.25 * widthRatio;
+		this.walkingCap = 80 * 625;
+		this.runningCap = 2 * this.walkingCap;
+		this.jumpHeight = 6;
+		this.acceleration = 625;
+		this.deacceleration = 625;
 		this.spriteChangeRate = 0;
 	}
 	deaccelerate() {
@@ -89,7 +89,8 @@ export class PlayerClass extends EntityClass {
 			}
 		}
 
-		this.x += Math.round(this.vx);
-		this.y += Math.round(this.vy);
+		this.x += this.transformCoordinates(this.vx);
+		console.log(this.x + this.transformCoordinates(this.vx));
+		this.y += Math.floor(this.vy);
 	}
 }

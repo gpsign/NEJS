@@ -23,19 +23,23 @@ export class EntityClass {
 		this.renderStepCount = 0;
 		this.spriteIndex = spriteIndex;
 		this.name = name;
+		this.stepVx = 0;
 	}
 	log() {
 		const debug = document.getElementById("debug");
 		let thisDebug = document.getElementById(this.name);
 
-		if (thisDebug.parentNode) {
+		if (thisDebug?.parentNode) {
 			thisDebug.parentNode.removeChild(thisDebug);
-		  }
+		}
 
 		const entries = Object.entries(this);
 
 		thisDebug = createDebugList(this.name, entries);
 		debug.appendChild(thisDebug);
+	}
+	transformCoordinates(coordinate) {
+		return Math.floor(coordinate / 10000);
 	}
 	updateSprite() {
 		if (this.spriteArray.length === 0) this.spriteArray = Sprites.array;
@@ -46,8 +50,8 @@ export class EntityClass {
 		this.bottom = this.y + this.height;
 		this.left = this.x;
 
-		this.FR = this.right + this.vx;
-		this.FL = this.left + this.vx;
+		this.FR = this.right + this.transformCoordinates(this.vx);
+		this.FL = this.left + this.transformCoordinates(this.vx);
 		this.FB = this.bottom + this.vy;
 		this.FT = this.top + this.vy;
 
@@ -55,19 +59,11 @@ export class EntityClass {
 		this.heightLine = [this.FT, this.FB];
 	}
 	sumVx(value) {
-		this.vx += value;
+		this.vx += value * widthRatio;
 
-		if (this.vx > this.vxCap) {
-			this.vx = this.vxCap;
-		}
+		if (this.vx > this.vxCap) this.vx = this.vxCap;
 
-		if (this.vx < -this.vxCap) {
-			this.vx = -this.vxCap;
-		}
-
-		//Fix sliding
-		if (contains(this.vx, -0.1, 0.1)) this.vx = 0;
-		this.vx = Math.round((this.vx + Number.EPSILON) * 100) / 100;
+		if (this.vx < -this.vxCap) this.vx = -this.vxCap;
 	}
 	sumVy(value) {
 		this.vy += value;
@@ -126,7 +122,7 @@ export class EntityClass {
 		}
 
 		//Collides with left wall
-		if (this.FL > screen.width || this.x + this.vx < 0) {
+		if (this.FL > screen.width || this.FR < 0) {
 			this.x = 0;
 			this.vx = 0;
 		}
@@ -170,7 +166,7 @@ export class EntityClass {
 		//Check if its is on the right side of the other
 		if (
 			lineOverlapse(this.heightLine, other.heightLine) &&
-			this.FL >= other.FR + this.vx
+			this.FL >= other.FR + this.transformCoordinates(this.vx)
 		) {
 			//Check for collison
 			if (contains(this.FL, other.FL, other.FR)) return true;
@@ -194,7 +190,7 @@ export class EntityClass {
 		//Check if its is on the left side of the other
 		if (
 			lineOverlapse(this.heightLine, other.heightLine) &&
-			this.FR <= other.FL + this.vx
+			this.FR <= other.FL + this.transformCoordinates(this.vx)
 		) {
 			//Check for collison
 			if (contains(this.FR, other.FL, other.FR)) return true;

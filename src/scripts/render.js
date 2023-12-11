@@ -3,6 +3,7 @@ import brickSprite from "./sprites/brick.js";
 import groundSprite from "./sprites/ground.js";
 import palettes from "./sprites/palettes.js";
 import goombaSprite from "./sprites/goomba.js";
+import config from "./config.js";
 
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
@@ -19,8 +20,9 @@ function render(instance) {
 	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
 		entity.render();
-		entity.log();
 	});
+
+	if (config.debugMode) instance.world.entities[0].log();
 
 	instance.world.walls.forEach((walls) => {
 		walls.render();
