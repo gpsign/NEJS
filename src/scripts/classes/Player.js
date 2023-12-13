@@ -8,16 +8,24 @@ export class PlayerClass extends EntityClass {
 		super(xTile, yTile, width, height, spriteIndex, name);
 		this.vx = 0;
 		this.vy = 0;
-		this.walkingCap = 80 * 625;
+		this.walkingCap = 50 * 625;
 		this.runningCap = 2 * this.walkingCap;
 		this.jumpHeight = 6;
 		this.acceleration = 625;
-		this.deacceleration = 625;
+		this.deceleration = 1 * this.acceleration;
 		this.spriteChangeRate = 0;
 	}
-	deaccelerate() {
-		if (this.vx > 0) this.sumVx(-this.deacceleration);
-		else if (this.vx < 0) this.sumVx(this.deacceleration);
+	decelerate() {
+		/**
+		 * Decelerates the player's velocity.
+		 */
+		if (this.vx > 0) {
+			if (this.vx - this.deceleration <= 0) this.vx = 0;
+			else this.sumVx(-this.deceleration);
+		} else if (this.vx < 0) {
+			if (this.vx + this.deceleration >= 0) this.vx = 0;
+			else this.sumVx(this.deceleration);
+		}
 	}
 	wallCollision() {
 		world.walls.forEach((wall) => {
@@ -47,10 +55,10 @@ export class PlayerClass extends EntityClass {
 		//Gravity
 		this.sumVy(world.gravity * heightRatio);
 
-		//deaccelerates when not moving
-		if (!keyMap["a"] && !keyMap["d"]) this.deaccelerate();
+		//decelerates when not moving
+		if (!keyMap["a"] && !keyMap["d"]) this.decelerate();
 
-		this.screenColission();
+		this.screenCollision();
 
 		//Jumps
 		if ((keyMap["w"] || keyMap[" "]) && this.onGround) {
@@ -70,7 +78,7 @@ export class PlayerClass extends EntityClass {
 		if (keyMap["a"] != keyMap["d"]) this.sumVx(this.acceleration * direction);
 
 		//Cancel Movement
-		if (keyMap["a"] && keyMap["d"]) this.deaccelerate();
+		if (keyMap["a"] && keyMap["d"]) this.decelerate();
 
 		//Check for collisions
 		this.wallCollision();
@@ -90,7 +98,6 @@ export class PlayerClass extends EntityClass {
 		}
 
 		this.x += this.transformCoordinates(this.vx);
-		console.log(this.x + this.transformCoordinates(this.vx));
 		this.y += Math.floor(this.vy);
 	}
 }

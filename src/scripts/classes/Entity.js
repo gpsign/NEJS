@@ -113,7 +113,7 @@ export class EntityClass {
 			this.newSprite.render();
 		}
 	}
-	screenColission() {
+	screenCollision() {
 		//Collides with ground
 		if (this.FB > screen.height) {
 			this.onGround = true;

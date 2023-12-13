@@ -30,7 +30,7 @@ export class EnemyClass extends EntityClass {
 			}
 		});
 	}
-	screenColission() {
+	screenCollision() {
 		//Collides with ground
 		if (this.futureBottom > screen.height) {
 			while (this.y + this.height < screen.height) this.y++;
@@ -55,7 +55,7 @@ export class EnemyClass extends EntityClass {
 		this.sumVy(world.gravity);
 
 		this.wallCollision();
-		this.screenColission();
+		this.screenCollision();
 
 		this.x += this.vx;
 		this.y += this.vy;
