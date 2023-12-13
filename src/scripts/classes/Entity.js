@@ -1,13 +1,6 @@
 import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
-import {
-	contains,
-	createDebugItem,
-	createDebugList,
-	isValid,
-	lineOverlapse,
-} from "../utils.js";
-import { world } from "../world.js";
+import { contains, isValid, lineOverlaps } from "../utils.js";
 
 export class EntityClass {
 	spriteArray = [];
@@ -25,19 +18,7 @@ export class EntityClass {
 		this.name = name;
 		this.stepVx = 0;
 	}
-	log() {
-		const debug = document.getElementById("debug");
-		let thisDebug = document.getElementById(this.name);
-
-		if (thisDebug?.parentNode) {
-			thisDebug.parentNode.removeChild(thisDebug);
-		}
-
-		const entries = Object.entries(this);
-
-		thisDebug = createDebugList(this.name, entries);
-		debug.appendChild(thisDebug);
-	}
+	log() {}
 	transformCoordinates(coordinate) {
 		return Math.floor(coordinate / 10000);
 	}
@@ -152,7 +133,7 @@ export class EntityClass {
 	checkTopCollision(other) {
 		//Check if it is above the other
 		if (
-			lineOverlapse(this.widthLine, other.widthLine) &&
+			lineOverlaps(this.widthLine, other.widthLine) &&
 			this.FB - this.vy <= other.FT
 		) {
 			//Check for collision
@@ -165,7 +146,7 @@ export class EntityClass {
 	checkRightCollision(other) {
 		//Check if its is on the right side of the other
 		if (
-			lineOverlapse(this.heightLine, other.heightLine) &&
+			lineOverlaps(this.heightLine, other.heightLine) &&
 			this.FL >= other.FR + this.transformCoordinates(this.vx)
 		) {
 			//Check for collison
@@ -177,7 +158,7 @@ export class EntityClass {
 	checkBottomCollision(other) {
 		//Check if its is below the other
 		if (
-			lineOverlapse(this.widthLine, other.widthLine) &&
+			lineOverlaps(this.widthLine, other.widthLine) &&
 			this.FT >= other.FB + this.vy
 		) {
 			//Check for collision
@@ -189,7 +170,7 @@ export class EntityClass {
 	checkLeftCollision(other) {
 		//Check if its is on the left side of the other
 		if (
-			lineOverlapse(this.heightLine, other.heightLine) &&
+			lineOverlaps(this.heightLine, other.heightLine) &&
 			this.FR <= other.FL + this.transformCoordinates(this.vx)
 		) {
 			//Check for collison

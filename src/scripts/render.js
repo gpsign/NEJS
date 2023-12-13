@@ -4,6 +4,7 @@ import groundSprite from "./sprites/ground.js";
 import palettes from "./sprites/palettes.js";
 import goombaSprite from "./sprites/goomba.js";
 import config from "./config.js";
+import { copyFields } from "./utils.js";
 
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");

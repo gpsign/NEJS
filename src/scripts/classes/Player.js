@@ -100,4 +100,7 @@ export class PlayerClass extends EntityClass {
 		this.x += this.transformCoordinates(this.vx);
 		this.y += Math.floor(this.vy);
 	}
+	log(){
+	
+	}
 }
