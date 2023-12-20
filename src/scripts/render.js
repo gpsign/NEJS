@@ -4,7 +4,6 @@ import groundSprite from "./sprites/ground.js";
 import palettes from "./sprites/palettes.js";
 import goombaSprite from "./sprites/goomba.js";
 import config from "./config.js";
-import { copyFields } from "./utils.js";
 
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
@@ -20,10 +19,9 @@ function render(instance) {
 
 	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
+		if (config.debugMode) entity.log();
 		entity.render();
 	});
-
-	if (config.debugMode) instance.world.entities[0].log();
 
 	instance.world.walls.forEach((walls) => {
 		walls.render();

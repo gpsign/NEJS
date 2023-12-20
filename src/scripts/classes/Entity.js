@@ -1,11 +1,12 @@
 import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
 import { contains, isValid, lineOverlaps } from "../utils.js";
+import { logObject } from "../log.js";
 
 export class EntityClass {
 	spriteArray = [];
 
-	constructor(xTile, yTile, width, height, spriteIndex, name = "") {
+	constructor(xTile, yTile, width, height, spriteIndex, name = "", debug = []) {
 		this.x = Sprites.tileSize * xTile * widthRatio;
 		this.y = Sprites.tileSize * yTile * heightRatio;
 		this.width = Sprites.tileSize * width * widthRatio;
@@ -17,8 +18,11 @@ export class EntityClass {
 		this.spriteIndex = spriteIndex;
 		this.name = name;
 		this.stepVx = 0;
+		this.debug = debug;
 	}
-	log() {}
+	log() {
+		if (this.debug.length != 0) logObject(this, this.debug);
+	}
 	transformCoordinates(coordinate) {
 		return Math.floor(coordinate / 10000);
 	}

@@ -1,47 +1,82 @@
+import { copyFields } from "./utils.js";
+
 const debug = document.getElementById("debug");
 
-export function log(entity, fields) {
-	const entries = Object.entries(this);
+export const debugList = {};
 
-	thisDebug = createDebugList(this.name, entries);
-	debug.appendChild(thisDebug);
+export function log(key, value) {
+	const logItem = createLogItem(key, value);
+
+	debug.appendChild(logItem);
 }
 
-export function createDebugItem(key, value) {
-	const container = document.createElement("div");
-	container.style.display = "flex";
+export function logObject(object, fields) {
+	const onlySelectedFields = copyFields(object, fields);
+	let objectList = findLogList(object.name);
+
+	if (objectList === undefined) {
+		objectList = createLogList(object.name);
+		debugList[object.name] = objectList;
+
+		for (const [key, value] of Object.entries(onlySelectedFields))
+			objectList.push(key, value);
+	} else {
+		for (const [key, value] of Object.entries(onlySelectedFields))
+			objectList.update(key, value);
+	}
+}
+
+export function createLogItem(key, value, parent = "") {
+	const item = document.createElement("div");
+	item.style.display = "flex";
+	item.classList.add(parent);
+	item.classList.add(key);
 
 	const keyElement = document.createElement("h4");
 	keyElement.innerHTML = key + ": ";
+	keyElement.classList.add(key + "-key");
+
 	const valueElement = document.createElement("p");
 	valueElement.innerHTML = value;
+	valueElement.classList.add(key + "-value");
 
-	container.appendChild(keyElement);
-	container.appendChild(valueElement);
+	item.appendChild(keyElement);
+	item.appendChild(valueElement);
 
-	return container;
+	return item;
 }
 
-export function createDebugList(name, values) {
-	const container = document.createElement("div");
-	container.id = name;
-	container.innerHTML = name + ": ";
+export function createLogList(name) {
+	const list = document.createElement("div");
+	list.id = name + "-list";
+	list.innerHTML = name + ": ";
+	list.style.margin = "20px 15px";
 
-	// let expanded = false;
-
-	// container.style.maxHeight = "20px";
-	// container.style.overflow = "hidden";
-	// container.style.marginBottom = "20px";
-	// container.onclick = () => {
-	// 	if (container.style.maxHeight === "20px")
-	// 		container.style.maxHeight = "unset";
-	// 	else container.style.maxHeight = "20px";
-	// };
-
-	for (const [key, value] of values) {
-		if (typeof value != "object")
-			container.appendChild(createDebugItem(key, value));
+	function push(key, value) {
+		if (value?.push) {
+			for (let i = 0; i < value.length; i++)
+				list.appendChild(createLogItem(key, value[i], name));
+		} else list.appendChild(createLogItem(key, value, name));
+	}
+	function update(key, value) {
+		const item = findLogItemValue(key, name);
+		if (item) item.innerHTML = value;
 	}
 
-	return container;
+	debug.appendChild(list);
+	return { list, push, update };
+}
+
+export function findLogList(key) {
+	return debugList[key];
+}
+
+export function findLogItem(key, parent = undefined) {
+	return document.querySelector("." + key + (parent ? "." + parent : ""));
+}
+
+export function findLogItemValue(key, parent = undefined) {
+	return document.querySelector(
+		`.${key}` + (parent ? `.${parent} ` : " ") + `.${key}-value`
+	);
 }

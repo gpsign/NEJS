@@ -4,8 +4,8 @@ import { world } from "../world.js";
 import { EntityClass } from "./Entity.js";
 
 export class PlayerClass extends EntityClass {
-	constructor(xTile, yTile, width, height, spriteIndex, name = "") {
-		super(xTile, yTile, width, height, spriteIndex, name);
+	constructor(xTile, yTile, width, height, spriteIndex, name = "", debug = []) {
+		super(xTile, yTile, width, height, spriteIndex, name, debug);
 		this.vx = 0;
 		this.vy = 0;
 		this.walkingCap = 50 * 625;
@@ -99,8 +99,5 @@ export class PlayerClass extends EntityClass {
 
 		this.x += this.transformCoordinates(this.vx);
 		this.y += Math.floor(this.vy);
-	}
-	log(){
-	
 	}
 }
