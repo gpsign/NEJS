@@ -88,9 +88,47 @@ export function isValid(...args) {
 	return true;
 }
 
-export function copyFields(object, fields) {
+export function copyFields(object, fields = undefined) {
 	let newObject = {};
-	for (const key of fields) newObject[key] = object[key];
+
+	if (fields.push) for (const key of fields) newObject[key] = object[key];
+	return newObject;
+}
+
+export function copyObject(object) {
+	let newObject = {};
+
+	for (const [key, value] of Object.entries(object)) {
+		if (value.push) {
+			newObject[key] = copyArray(value);
+		} else if (typeof value === "object") {
+			newObject[key] = copyObject(value);
+		} else newObject[key] = value;
+	}
 
 	return newObject;
+}
+
+export function setObject(target, valueObject) {
+	for (const [key, value] of Object.entries(valueObject)) {
+		if (value.push) {
+			target[key] = copyArray(value);
+		} else if (typeof value === "object") {
+			setObject(target[key], value);
+		} else target[key] = value;
+	}
+}
+
+export function copyArray(oldArray) {
+	let newArray = [];
+
+	for (const item of oldArray) {
+		if (item.push) {
+			newArray.push(copyArray(item));
+		} else if (typeof item === "object") {
+			newArray.push(copyObject(item));
+		} else newArray.push(item);
+	}
+
+	return newArray;
 }

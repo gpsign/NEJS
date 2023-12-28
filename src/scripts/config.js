@@ -1,5 +1,11 @@
-const config = {
+import applyConfig from "./applyConfigs.js";
+
+export const config = {
 	editorMode: false,
 	debugMode: true,
 };
-export default config;
+
+export function toggleConfig(field) {
+	config[field] = !config[field];
+	applyConfig();
+}

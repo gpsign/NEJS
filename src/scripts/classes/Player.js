@@ -45,6 +45,21 @@ export class PlayerClass extends EntityClass {
 			}
 		});
 	}
+	entityCollision() {
+		for (let i = 0; i < world.entities.length; i++) {
+			if (world.entities[i] != undefined && world.entities[i] != this) {
+				const collided = this.checkCollision(world.entities[i]);
+
+				if (collided)
+					if (collided === "top") {
+						this.vy = -3;
+						delete world.entities[i];
+					} else {
+						location.reload();
+					}
+			}
+		}
+	}
 	calculateMovement() {
 		this.updateSides();
 
@@ -79,23 +94,6 @@ export class PlayerClass extends EntityClass {
 
 		//Cancel Movement
 		if (keyMap["a"] && keyMap["d"]) this.decelerate();
-
-		//Check for collisions
-		this.wallCollision();
-
-		for (let i = 0; i < world.entities.length; i++) {
-			if (world.entities[i] != undefined && world.entities[i] != this) {
-				const collided = this.checkCollission(world.entities[i]);
-
-				if (collided)
-					if (collided === "top") {
-						this.vy = -3;
-						delete world.entities[i];
-					} else {
-						location.reload();
-					}
-			}
-		}
 
 		this.x += this.transformCoordinates(this.vx);
 		this.y += Math.floor(this.vy);

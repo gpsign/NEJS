@@ -3,7 +3,9 @@ import brickSprite from "./sprites/brick.js";
 import groundSprite from "./sprites/ground.js";
 import palettes from "./sprites/palettes.js";
 import goombaSprite from "./sprites/goomba.js";
-import config from "./config.js";
+import { config } from "./config.js";
+import { copyObject } from "./utils.js";
+import { stateMemory } from "./main.js";
 
 const screen = document.getElementById("screen");
 const p = screen.getContext("2d");
@@ -14,16 +16,45 @@ const NESHeight = 240;
 const widthRatio = screen.width / NESWidth;
 const heightRatio = screen.height / NESHeight;
 
+function saveState(instance) {
+	let state = copyObject(instance.world);
+
+	if (stateMemory.length >= 100) {
+		stateMemory.shift();
+		stateMemory.push(state);
+	} else stateMemory.push(state);
+}
+
+function renderImage(instance) {
+	instance.world.entities.forEach((entity) => {
+		entity.render();
+	});
+
+	instance.world.walls.forEach((walls) => {
+		walls.render();
+	});
+}
+
 function render(instance) {
 	p.clearRect(0, 0, screen.width, screen.height);
 
+	saveState(instance);
+
 	instance.world.entities.forEach((entity) => {
 		entity.calculateMovement();
+	});
+
+	instance.world.entities.forEach((entity) => {
+		entity.calculateCollision && entity.calculateCollision();
+	});
+
+	instance.world.entities.forEach((entity) => {
 		if (config.debugMode) entity.log();
 		entity.render();
 	});
 
 	instance.world.walls.forEach((walls) => {
+		if (config.debugMode) walls.log();
 		walls.render();
 	});
 
@@ -80,4 +111,4 @@ const brickSquareArray = [
 	new MetaTileClass(brickMetaTile, 9, 8),
 ];
 
-export { render, p, screen, widthRatio, heightRatio, goomba };
+export { render, renderImage, p, screen, widthRatio, heightRatio, goomba };

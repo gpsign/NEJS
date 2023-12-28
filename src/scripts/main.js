@@ -1,6 +1,8 @@
 import applyConfig from "./applyConfigs.js";
 import { keyMap } from "./keymap.js";
-import { render } from "./render.js";
+import { applyMenus } from "./menus.js";
+import { render, renderImage } from "./render.js";
+import { setObject } from "./utils.js";
 import { world } from "./world.js";
 
 export const instance = {
@@ -10,14 +12,33 @@ export const instance = {
 	FPS: 75,
 };
 
-export function start() {
-	instance.game = setInterval(() => {
-		window.requestAnimationFrame(() => render(instance));
-	}, 1000 / instance.FPS);
+export const stateMemory = [];
+
+let stateIndex = 99;
+
+function nextFrame() {
+	// if (stateIndex < stateMemory.length - 1) {
+	// 	stateIndex++;
+	// 	renderState();
+	// } else
+	// console.log(instance.world);
+	window.requestAnimationFrame(() => render(instance));
 }
 
-function oneStep() {
-	window.requestAnimationFrame(() => render(instance));
+function previousFrame() {
+	if (stateIndex >= stateMemory.length - 1) stateIndex = stateMemory.length - 1;
+	stateIndex--;
+	renderState();
+}
+
+function renderState() {
+	setObject(instance.world, stateMemory[stateIndex]);
+
+	renderImage(instance);
+}
+
+export function start() {
+	instance.game = setInterval(nextFrame, 1000 / instance.FPS);
 }
 
 document.addEventListener("keydown", (e) => {
@@ -25,7 +46,8 @@ document.addEventListener("keydown", (e) => {
 	const key = e.key.toLowerCase();
 
 	if (key === "r") location.reload();
-	if (key === "." && !instance.isGameRunning) oneStep();
+	if (key === "." && !instance.isGameRunning) nextFrame();
+	if (key === "," && !instance.isGameRunning) previousFrame();
 	if (key === "l") log();
 
 	if (key === "enter") {
@@ -42,3 +64,4 @@ document.addEventListener("keyup", (e) => {
 });
 
 applyConfig();
+applyMenus();

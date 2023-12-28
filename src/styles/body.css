@@ -36,3 +36,29 @@ body {
 	height: fit-content;
 	margin: 2px;
 }
+
+#editor-button,
+#debugger-button {
+	width: 150px;
+	height: 40px;
+}
+
+#menus {
+	width: 100vw;
+	display: flex;
+	position: absolute;
+	top: 0;
+}
+
+#menus button {
+	color: white;
+	font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+	text-transform: uppercase;
+	font-weight: bold;
+	cursor: pointer;
+	transition: transform 0.1s ease-in-out;
+}
+
+#menus button:active {
+	transform: scale(0.99);
+}

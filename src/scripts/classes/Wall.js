@@ -1,10 +1,18 @@
 import { EntityClass } from "./Entity.js";
 
 export class WallClass extends EntityClass {
-	constructor(xTile, yTile, width, height, spriteIndex) {
-		super(xTile, yTile, width, height, spriteIndex);
+	constructor(
+		xTile,
+		yTile,
+		width,
+		height,
+		spriteIndex,
+		name = "wall",
+		debug = []
+	) {
+		super(xTile, yTile, width, height, spriteIndex, name, debug);
 		this.updateSides();
 		this.spriteChangeRate = 0;
-		this.name = "wall";
+		this.name = name;
 	}
 }

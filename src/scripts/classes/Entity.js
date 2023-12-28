@@ -58,6 +58,12 @@ export class EntityClass {
 
 		this.vy = Math.round((this.vy + Number.EPSILON) * 100) / 100;
 	}
+	entityCollision() {}
+	wallCollision() {}
+	calculateCollision() {
+		this.wallCollision();
+		this.entityCollision();
+	}
 	changeSprite() {
 		this.updateSprite();
 		if (this.spriteChangeRate === 0)
@@ -118,7 +124,7 @@ export class EntityClass {
 			this.vx = 0;
 		}
 	}
-	checkCollission(other) {
+	checkCollision(other) {
 		if (this.checkTopCollision(other)) return "top";
 		if (this.checkRightCollision(other)) return "right";
 		if (this.checkLeftCollision(other)) return "left";
