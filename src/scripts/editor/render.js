@@ -6,8 +6,6 @@ const palette = document.getElementById("color-palette");
 const editor = document.getElementById("editor");
 
 function createPalette() {
-	console.log(colors);
-
 	for (const [key, value] of Object.entries(colors)) {
 		const paint = document.createElement("div");
 		paint.classList.add("color");

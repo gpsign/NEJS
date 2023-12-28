@@ -6,7 +6,15 @@ import { logObject } from "../log.js";
 export class EntityClass {
 	spriteArray = [];
 
-	constructor(xTile, yTile, width, height, spriteIndex, name = "", debug = []) {
+	constructor(
+		xTile,
+		yTile,
+		width,
+		height,
+		spriteIndex,
+		name = "",
+		debug = ["collidedWith"]
+	) {
 		this.x = Sprites.tileSize * xTile * widthRatio;
 		this.y = Sprites.tileSize * yTile * heightRatio;
 		this.width = Sprites.tileSize * width * widthRatio;
@@ -19,6 +27,7 @@ export class EntityClass {
 		this.name = name;
 		this.stepVx = 0;
 		this.debug = debug;
+		this.collidedWith = "";
 	}
 	log() {
 		if (this.debug.length != 0) logObject(this, this.debug);
@@ -106,20 +115,20 @@ export class EntityClass {
 	}
 	screenCollision() {
 		//Collides with ground
-		if (this.FB > screen.height) {
+		if (this.bottom >= screen.height) {
 			this.onGround = true;
 			this.y = screen.height - this.height;
 			this.vy = 0;
 		}
 
 		//Collides with left wall
-		if (this.FL > screen.width || this.FR < 0) {
+		if (this.left < 0) {
 			this.x = 0;
 			this.vx = 0;
 		}
 
 		//Collides with right wall
-		if (this.FR > screen.width) {
+		if (this.right >= screen.width) {
 			this.x = screen.width - this.width;
 			this.vx = 0;
 		}
@@ -144,10 +153,10 @@ export class EntityClass {
 		//Check if it is above the other
 		if (
 			lineOverlaps(this.widthLine, other.widthLine) &&
-			this.FB - this.vy <= other.FT
+			this.bottom - this.vy <= other.top
 		) {
 			//Check for collision
-			if (contains(this.FB, other.FT, other.FB)) {
+			if (contains(this.bottom, other.top, other.bottom)) {
 				return true;
 			}
 			return false;
@@ -157,10 +166,10 @@ export class EntityClass {
 		//Check if its is on the right side of the other
 		if (
 			lineOverlaps(this.heightLine, other.heightLine) &&
-			this.FL >= other.FR + this.transformCoordinates(this.vx)
+			this.left >= other.right + this.transformCoordinates(this.vx)
 		) {
-			//Check for collison
-			if (contains(this.FL, other.FL, other.FR)) return true;
+			//Check for collision
+			if (contains(this.left, other.left, other.right)) return true;
 
 			return false;
 		}
@@ -169,10 +178,10 @@ export class EntityClass {
 		//Check if its is below the other
 		if (
 			lineOverlaps(this.widthLine, other.widthLine) &&
-			this.FT >= other.FB + this.vy
+			this.top >= other.bottom + this.vy
 		) {
 			//Check for collision
-			if (contains(this.FT, other.FT + 1, other.FB)) return true;
+			if (contains(this.top, other.top + 1, other.bottom)) return true;
 
 			return false;
 		}
@@ -181,10 +190,10 @@ export class EntityClass {
 		//Check if its is on the left side of the other
 		if (
 			lineOverlaps(this.heightLine, other.heightLine) &&
-			this.FR <= other.FL + this.transformCoordinates(this.vx)
+			this.right <= other.left + this.transformCoordinates(this.vx)
 		) {
-			//Check for collison
-			if (contains(this.FR, other.FL, other.FR)) return true;
+			//Check for collision
+			if (contains(this.right, other.left, other.right)) return true;
 
 			return false;
 		}

@@ -58,7 +58,7 @@ function render(instance) {
 		walls.render();
 	});
 
-	groundArray.forEach((g) => g.render());
+	//groundArray.forEach((g) => g.render());
 	brickArray.forEach((b) => b.render());
 	brickSquareArray.forEach((bq) => bq.render());
 }

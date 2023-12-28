@@ -10,9 +10,7 @@ function applyConfig() {
 	if (config.editorMode) {
 		screen.style.display = "none";
 		debug.style.display = "none";
-
-		console.log(editor);
-
+		
 		if (editor.childNodes.length === 0) {
 			createPaintArea();
 			createPalette();
