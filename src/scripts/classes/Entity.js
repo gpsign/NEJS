@@ -6,15 +6,7 @@ import { logObject } from "../log.js";
 export class EntityClass {
 	spriteArray = [];
 
-	constructor(
-		xTile,
-		yTile,
-		width,
-		height,
-		spriteIndex,
-		name = "",
-		debug = ["collidedWith"]
-	) {
+	constructor(xTile, yTile, width, height, spriteIndex, name = "", debug = []) {
 		this.x = Sprites.tileSize * xTile * widthRatio;
 		this.y = Sprites.tileSize * yTile * heightRatio;
 		this.width = Sprites.tileSize * width * widthRatio;
@@ -27,7 +19,6 @@ export class EntityClass {
 		this.name = name;
 		this.stepVx = 0;
 		this.debug = debug;
-		this.collidedWith = "";
 	}
 	log() {
 		if (this.debug.length != 0) logObject(this, this.debug);
@@ -151,10 +142,7 @@ export class EntityClass {
 	}
 	checkTopCollision(other) {
 		//Check if it is above the other
-		if (
-			lineOverlaps(this.widthLine, other.widthLine) &&
-			this.bottom - this.vy <= other.top
-		) {
+		if (lineOverlaps(this.widthLine, other.widthLine)) {
 			//Check for collision
 			if (contains(this.bottom, other.top, other.bottom)) {
 				return true;
@@ -164,22 +152,18 @@ export class EntityClass {
 	}
 	checkRightCollision(other) {
 		//Check if its is on the right side of the other
-		if (
-			lineOverlaps(this.heightLine, other.heightLine) &&
-			this.left >= other.right + this.transformCoordinates(this.vx)
-		) {
+		if (lineOverlaps(this.heightLine, other.heightLine)) {
 			//Check for collision
-			if (contains(this.left, other.left, other.right)) return true;
+			if (contains(this.left, other.left, other.right)) {
+				return true;
+			}
 
 			return false;
 		}
 	}
 	checkBottomCollision(other) {
 		//Check if its is below the other
-		if (
-			lineOverlaps(this.widthLine, other.widthLine) &&
-			this.top >= other.bottom + this.vy
-		) {
+		if (lineOverlaps(this.widthLine, other.widthLine)) {
 			//Check for collision
 			if (contains(this.top, other.top + 1, other.bottom)) return true;
 
@@ -188,10 +172,7 @@ export class EntityClass {
 	}
 	checkLeftCollision(other) {
 		//Check if its is on the left side of the other
-		if (
-			lineOverlaps(this.heightLine, other.heightLine) &&
-			this.right <= other.left + this.transformCoordinates(this.vx)
-		) {
+		if (lineOverlaps(this.heightLine, other.heightLine)) {
 			//Check for collision
 			if (contains(this.right, other.left, other.right)) return true;
 

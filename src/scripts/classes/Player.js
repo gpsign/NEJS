@@ -28,33 +28,25 @@ export class PlayerClass extends EntityClass {
 		}
 	}
 	wallCollision() {
-		let collided = false;
 		world.walls.forEach((wall) => {
 			if (this.checkTopCollision(wall)) {
-				this.collidedWith = wall.name;
-				collided = true;
 				while (this.y + this.height < wall.top - 1) this.y++;
 				this.vy = 0;
 				this.onGround = true;
-			} else if (this.checkBottomCollision(wall)) {
-				this.collidedWith = wall.name;
-				collided = true;
+			}
+			if (this.checkBottomCollision(wall)) {
 				while (this.y > wall.bottom + 2) this.y--;
 				this.vy = 0;
-			} else if (this.checkLeftCollision(wall)) {
-				collided = true;
-				this.collidedWith = wall.name;
-				while (this.x + this.width < wall.left - 1) this.x++;
+			}
+			if (this.checkLeftCollision(wall)) {
+				this.x = wall.left - this.transformCoordinates(this.vx) - 1;
 				this.vx = 0;
-			} else if (this.checkRightCollision(wall)) {
-				collided = true;
-				this.collidedWith = wall.name;
-				while (this.x > wall.right + 1) this.x--;
+			}
+			if (this.checkRightCollision(wall)) {
+				this.x = wall.right + this.transformCoordinates(this.vx) + 1;
 				this.vx = 0;
 			}
 		});
-
-		if (!collided) this.collidedWith = "";
 	}
 	entityCollision() {
 		for (let i = 0; i < world.entities.length; i++) {

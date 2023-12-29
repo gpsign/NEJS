@@ -30,11 +30,16 @@ body {
 	color: white;
 	font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 	padding: 0px 50px;
+	position: absolute;
+	left: 0;
 }
 
 #debug * {
-	height: fit-content;
 	margin: 2px;
+}
+
+#debug > div > div {
+	margin-left: 15px;
 }
 
 #editor-button,

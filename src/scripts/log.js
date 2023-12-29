@@ -49,7 +49,12 @@ export function createLogItem(key, value, parent = "") {
 export function createLogList(name) {
 	const list = document.createElement("div");
 	list.id = name + "-list";
-	list.innerHTML = name + ": ";
+
+	const title = document.createElement("h3");
+	title.innerHTML = name + ": ";
+
+	list.appendChild(title);
+
 	list.style.margin = "20px 15px";
 
 	function push(key, value) {
