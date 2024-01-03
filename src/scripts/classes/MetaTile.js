@@ -1,28 +1,35 @@
 import { heightRatio, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
 import { isValid, repeat, repeatArrayValues } from "../utils.js";
+import AreaClass from "./Area.js";
 
-export default class MetaTileClass {
+export default class MetaTileClass extends AreaClass {
 	constructor(tiles, xPosition = 0, yPosition = 0) {
-		this.xPosition = xPosition * Sprites.tileSize * widthRatio;
-		this.yPosition = yPosition * Sprites.tileSize * heightRatio;
-
 		if (!tiles.push) {
 			const cloned = [];
 			repeat(() => cloned.push(tiles.clone()), 4);
 
+			super(
+				xPosition * Sprites.tileSize,
+				yPosition * Sprites.tileSize,
+				2 * tiles.width,
+				2 * tiles.height
+			);
+
 			this.tiles = cloned;
-
-			this.width = 2 * tiles.width;
-			this.height = 2 * tiles.height;
-
 			this.childSize = tiles.size;
 			this.positionTiles();
 		} else {
-			this.tiles = tiles;
+			super(
+				xPosition * Sprites.tileSize,
+				yPosition * Sprites.tileSize,
+				2 * tiles[0].width,
+				2 * tiles[0].height,
+				1,
+				1
+			);
 
-			this.width = 2 * tiles[0].width;
-			this.height = 2 * tiles[0].height;
+			this.tiles = tiles;
 
 			this.childSize = tiles[0].size;
 			this.positionTiles();
@@ -40,20 +47,26 @@ export default class MetaTileClass {
 	positionTiles() {
 		let [first, second, third, fourth] = this.tiles;
 
-		first.xPosition = this.xPosition;
-		first.yPosition = this.yPosition;
+		first.x = this.x;
+		first.y = this.y;
 		if (first.positionTiles) first.positionTiles();
 
-		second.xPosition = first.xPosition + first.width;
-		second.yPosition = first.yPosition;
+		first.update();
+
+		second.x = first.xWidth;
+		second.y = first.y;
 		if (second.positionTiles) second.positionTiles();
 
-		third.xPosition = first.xPosition;
-		third.yPosition = first.yPosition + first.height;
+		second.update();
+
+		third.x = first.x;
+		third.y = first.yHeight;
 		if (third.positionTiles) third.positionTiles();
 
-		fourth.xPosition = third.xPosition + third.width;
-		fourth.yPosition = third.yPosition;
+		third.update();
+
+		fourth.x = third.xWidth;
+		fourth.y = third.y;
 		if (fourth.positionTiles) fourth.positionTiles();
 	}
 }

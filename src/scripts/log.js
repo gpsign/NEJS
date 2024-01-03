@@ -29,6 +29,7 @@ export function logObject(object, fields) {
 export function createLogItem(key, value, parent = "") {
 	const item = document.createElement("div");
 	item.style.display = "flex";
+
 	item.classList.add(parent);
 	item.classList.add(key);
 

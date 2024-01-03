@@ -32,11 +32,11 @@ export default class AreaClass {
 			this.bottomRight,
 		];
 	}
-	static update() {
+	update() {
 		this.topLeft = [this.x, this.y];
-		this.topRight = [this.x + this.width, this.y];
-		this.bottomLeft = [this.x, this.y + this.height];
-		this.bottomRight = [this.x + this.width, this.y + this.height];
+		this.topRight = [this.xWidth, this.y];
+		this.bottomLeft = [this.x, this.y];
+		this.bottomRight = [this.xWidth, this.yHeight];
 
 		this.data = [this.x, this.y, this.width, this.height];
 
@@ -64,8 +64,3 @@ export default class AreaClass {
 		return false;
 	}
 }
-
-const A = new AreaClass(1, 1, 2, 2);
-const B = new AreaClass(3, 3, 5, 5);
-
-console.log(A.isInsideArea(B));

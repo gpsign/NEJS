@@ -2,17 +2,14 @@ import { heightRatio, p, screen, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
 import { contains, isValid, lineOverlaps } from "../utils.js";
 import { logObject } from "../log.js";
-
 import AreaClass from "./Area.js";
 
-export class EntityClass {
+export class EntityClass extends AreaClass {
 	spriteArray = [];
 
 	constructor(xTile, yTile, width, height, spriteIndex, name = "", debug = []) {
-		this.x = Sprites.tileSize * xTile * widthRatio;
-		this.y = Sprites.tileSize * yTile * heightRatio;
-		this.width = Sprites.tileSize * width * widthRatio;
-		this.height = Sprites.tileSize * height * heightRatio;
+		super(Sprites.tileSize * xTile, Sprites.tileSize * yTile, width, height);
+
 		this.vy = 0;
 		this.vx = 0;
 		this.onGround = false;
@@ -100,8 +97,8 @@ export class EntityClass {
 						this.sprite.height * heightRatio
 					);
 		else {
-			this.newSprite.xPosition = this.x;
-			this.newSprite.yPosition = this.y;
+			this.newSprite.x = this.x;
+			this.newSprite.y = this.y;
 			this.newSprite.positionTiles();
 			this.newSprite.render();
 		}

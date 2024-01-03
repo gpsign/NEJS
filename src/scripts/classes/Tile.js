@@ -1,20 +1,22 @@
 import { heightRatio, widthRatio } from "../render.js";
 import { Sprites } from "../sprites.js";
-import { unfold, repeatArrayValues, isValid, scaleMatrice } from "../utils.js";
+import { unfold, isValid, scaleMatrice as scaleMatrize } from "../utils.js";
+import AreaClass from "./Area.js";
 
-export default class TileClass {
-	constructor(p, CHR, pallete, xPosition = 0, yPosition = 0) {
-		this.xPosition = xPosition * Sprites.size * widthRatio;
-		this.yPosition = yPosition * Sprites.size * heightRatio;
-
-		this.width = Sprites.size * widthRatio;
-		this.height = Sprites.size * heightRatio;
+export default class TileClass extends AreaClass {
+	constructor(p, CHR, palette, xPosition = 0, yPosition = 0) {
+		super(
+			xPosition * Sprites.size,
+			yPosition * Sprites.size,
+			Sprites.size,
+			Sprites.size
+		);
 
 		this.sprite = p.createImageData(this.width, this.height);
-		this.pallete = pallete;
+		this.palette = palette;
 		this.p = p;
 		this.CHR = CHR;
-		this.scaledCHR = scaleMatrice(CHR, widthRatio, heightRatio);
+		this.scaledCHR = scaleMatrize(CHR, widthRatio, heightRatio);
 
 		const dataCanvas = this.sprite.data;
 
@@ -25,7 +27,7 @@ export default class TileClass {
 		for (let i = 0; i < unfoldedData.length; i++) {
 			for (let j = 0; j < widthRatio; j++) {
 				const pData = unfoldedData[i];
-				const color = pallete.data[pData];
+				const color = palette.data[pData];
 
 				dataCanvas[bitCounter] = color.r;
 				dataCanvas[bitCounter + 1] = color.g;
@@ -39,8 +41,8 @@ export default class TileClass {
 		this.sprite.data.set(dataCanvas);
 	}
 	render() {
-		if (isValid(this.xPosition, this.yPosition))
-			this.p.putImageData(this.sprite, this.xPosition, this.yPosition);
+		if (isValid(this.x, this.y))
+			this.p.putImageData(this.sprite, this.x, this.y);
 	}
 	mirror() {
 		const aux = this.sprite.data;
@@ -53,7 +55,7 @@ export default class TileClass {
 		for (let i = 0; i < unfoldedData.length; i++) {
 			for (let j = 0; j < widthRatio; j++) {
 				const pData = unfoldedData[i];
-				const color = this.pallete.data[pData];
+				const color = this.palette.data[pData];
 
 				aux[bitCounter] = color.r;
 				aux[bitCounter + 1] = color.g;
@@ -66,12 +68,6 @@ export default class TileClass {
 		this.sprite.data.set(aux);
 	}
 	clone() {
-		return new TileClass(
-			this.p,
-			this.CHR,
-			this.pallete,
-			this.xPosition,
-			this.yPosition
-		);
+		return new TileClass(this.p, this.CHR, this.palette, this.x, this.y);
 	}
 }
