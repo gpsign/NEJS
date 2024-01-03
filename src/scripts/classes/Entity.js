@@ -3,6 +3,8 @@ import { Sprites } from "../sprites.js";
 import { contains, isValid, lineOverlaps } from "../utils.js";
 import { logObject } from "../log.js";
 
+import AreaClass from "./Area.js";
+
 export class EntityClass {
 	spriteArray = [];
 
