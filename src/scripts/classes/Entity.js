@@ -140,14 +140,12 @@ export class EntityClass extends AreaClass {
 		return false;
 	}
 	checkTopCollision(other) {
-		//Check if it is above the other
-		if (lineOverlaps(this.widthLine, other.widthLine)) {
-			//Check for collision
-			if (contains(this.bottom, other.top, other.bottom)) {
+		if (this.isInsideArea(other)) {
+			if (contains(this.yHeight, other.y, other.y + other.width / 2))
 				return true;
-			}
 			return false;
 		}
+		return false;
 	}
 	checkRightCollision(other) {
 		//Check if its is on the right side of the other
