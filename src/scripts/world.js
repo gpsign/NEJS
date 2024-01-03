@@ -5,7 +5,7 @@ import { WallClass } from "./classes/Wall.js";
 export const world = {
 	gravity: 0.2,
 	entities: [
-		//new PlayerClass(12, 7, 1, 1, 16, "player", ["left", "right", "bottom"]),
+		new PlayerClass(12, 7, 1, 1, 16, "player", ["left", "right", "bottom"]),
 		//new EnemyClass(12, 12, 1, 1, 82, "enemy-1", ["left", "right"]),
 	],
 	walls: [
