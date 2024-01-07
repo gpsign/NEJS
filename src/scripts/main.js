@@ -4,12 +4,24 @@ import { applyMenus } from "./menus.js";
 import { render, renderImage } from "./render.js";
 import { setObject } from "./utils.js";
 import { world } from "./world.js";
+import { PlayerClass } from "./classes/Player.js";
+import { WallClass } from "./classes/Wall.js";
+
+new PlayerClass(12, 7, 1, 1, 16, "player", ["left", "right", "bottom"]);
+//new EnemyClass(12, 12, 1, 1, 82, "enemy-1", ["left", "right"]),
+
+new WallClass(5, 8, 6, 2, 68);
+new WallClass(0, 10, 1, 3, 68);
+new WallClass(0, 10, 1, 3, 68);
+new WallClass(0, 14, 10, 2, 66, "chão-left", ["top", "right"]);
+new WallClass(12, 14, 1, 2, 66, "chão-dir", ["top", "right"]);
+new WallClass(4, 8, 1, 1, 24);
 
 export const instance = {
-	game: undefined,
-	isGameRunning: true,
-	world,
-	FPS: 75,
+  game: undefined,
+  isGameRunning: true,
+  world,
+  FPS: 75,
 };
 
 export const stateMemory = [];
@@ -17,50 +29,50 @@ export const stateMemory = [];
 let stateIndex = 99;
 
 function nextFrame() {
-	// if (stateIndex < stateMemory.length - 1) {
-	// 	stateIndex++;
-	// 	renderState();
-	// } else
-	// console.log(instance.world);
-	window.requestAnimationFrame(() => render(instance));
+  // if (stateIndex < stateMemory.length - 1) {
+  // 	stateIndex++;
+  // 	renderState();
+  // } else
+  // console.log(instance.world);
+  window.requestAnimationFrame(() => render(instance));
 }
 
 function previousFrame() {
-	if (stateIndex >= stateMemory.length - 1) stateIndex = stateMemory.length - 1;
-	stateIndex--;
-	renderState();
+  if (stateIndex >= stateMemory.length - 1) stateIndex = stateMemory.length - 1;
+  stateIndex--;
+  renderState();
 }
 
 function renderState() {
-	setObject(instance.world, stateMemory[stateIndex]);
+  setObject(instance.world, stateMemory[stateIndex]);
 
-	renderImage(instance);
+  renderImage(instance);
 }
 
 export function start() {
-	instance.game = setInterval(nextFrame, 1000 / instance.FPS);
+  instance.game = setInterval(nextFrame, 1000 / instance.FPS);
 }
 
 document.addEventListener("keydown", (e) => {
-	e.preventDefault();
-	const key = e.key.toLowerCase();
+  e.preventDefault();
+  const key = e.key.toLowerCase();
 
-	if (key === "r") location.reload();
-	if (key === "." && !instance.isGameRunning) nextFrame();
-	if (key === "," && !instance.isGameRunning) previousFrame();
-	if (key === "l") log();
+  if (key === "r") location.reload();
+  if (key === "." && !instance.isGameRunning) nextFrame();
+  if (key === "," && !instance.isGameRunning) previousFrame();
+  if (key === "l") log();
 
-	if (key === "enter") {
-		instance.isGameRunning ? clearInterval(instance.game) : start();
+  if (key === "enter") {
+    instance.isGameRunning ? clearInterval(instance.game) : start();
 
-		instance.isGameRunning = !instance.isGameRunning;
-	}
-	keyMap[key] = true;
+    instance.isGameRunning = !instance.isGameRunning;
+  }
+  keyMap[key] = true;
 });
 
 document.addEventListener("keyup", (e) => {
-	const key = e.key.toLowerCase();
-	keyMap[key] = false;
+  const key = e.key.toLowerCase();
+  keyMap[key] = false;
 });
 
 applyConfig();

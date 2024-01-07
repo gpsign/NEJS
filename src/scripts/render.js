@@ -6,9 +6,10 @@ import goombaSprite from "./sprites/goomba.js";
 import { config } from "./config.js";
 import { copyObject } from "./utils.js";
 import { stateMemory } from "./main.js";
+import { world } from "./world.js";
 
 const screen = document.getElementById("screen");
-const p = screen.getContext("2d");
+const canvasPainter = screen.getContext("2d");
 
 const NESWidth = 256;
 const NESHeight = 240;
@@ -17,98 +18,107 @@ const widthRatio = screen.width / NESWidth;
 const heightRatio = screen.height / NESHeight;
 
 function saveState(instance) {
-	let state = copyObject(instance.world);
+  let state = copyObject(instance.world);
 
-	if (stateMemory.length >= 100) {
-		stateMemory.shift();
-		stateMemory.push(state);
-	} else stateMemory.push(state);
+  if (stateMemory.length >= 100) {
+    stateMemory.shift();
+    stateMemory.push(state);
+  } else stateMemory.push(state);
 }
 
 function renderImage(instance) {
-	instance.world.entities.forEach((entity) => {
-		entity.render();
-	});
+  instance.world.entities.forEach((entity) => {
+    entity.render();
+  });
 
-	instance.world.walls.forEach((walls) => {
-		walls.render();
-	});
+  instance.world.walls.forEach((walls) => {
+    walls.render();
+  });
 }
 
 function render(instance) {
-	p.clearRect(0, 0, screen.width, screen.height);
+  canvasPainter.clearRect(0, 0, screen.width, screen.height);
 
-	saveState(instance);
+  //    saveState(instance);
 
-	instance.world.entities.forEach((entity) => {
-		entity.calculateMovement();
-	});
+  // brickArray.forEach((b) => b.render());
+  // brickSquareArray.forEach((bq) => bq.render());
 
-	instance.world.entities.forEach((entity) => {
-		entity.calculateCollision && entity.calculateCollision();
-	});
+  instance.world.entities.forEach((entity) => {
+    entity.calculateMovement();
+  });
 
-	instance.world.entities.forEach((entity) => {
-		if (config.debugMode) entity.log();
-		entity.render();
-	});
+  instance.world.entities.forEach((entity) => {
+    entity.calculateCollision && entity.calculateCollision();
+  });
 
-	instance.world.walls.forEach((walls) => {
-		if (config.debugMode) walls.log();
-		walls.render();
-	});
+  instance.world.entities.forEach((entity) => {
+    if (config.debugMode) entity.log();
+    entity.render();
+  });
 
-	//groundArray.forEach((g) => g.render());
-	brickArray.forEach((b) => b.render());
-	brickSquareArray.forEach((bq) => bq.render());
+  instance.world.walls.forEach((walls) => {
+    if (config.debugMode) walls.log();
+    walls.render();
+  });
+
+  //groundArray.forEach((g) => g.render());
 }
 
-const brick = brickSprite(p, palettes[1]);
+const brick = brickSprite(canvasPainter, palettes[1]);
 const brickMetaTile = new MetaTileClass(brick);
 const brickSquare = new MetaTileClass(brickMetaTile, 4, 1);
-const goomba = new MetaTileClass(goombaSprite(p, palettes[2]));
+const goomba = new MetaTileClass(goombaSprite(canvasPainter, palettes[2]));
 
-const ground = groundSprite(p, palettes[1]);
+const ground = groundSprite(canvasPainter, palettes[1]);
 const groundMetaTile = new MetaTileClass(ground);
 const groundSquare = new MetaTileClass(groundMetaTile, 4, 6);
 const groundMegaSquare = new MetaTileClass(groundSquare, 7, 2);
 
 const groundArray = [
-	new MetaTileClass(groundMetaTile, 0, 13),
-	new MetaTileClass(groundMetaTile, 2, 13),
-	new MetaTileClass(groundMetaTile, 4, 13),
-	new MetaTileClass(groundMetaTile, 6, 13),
-	new MetaTileClass(groundMetaTile, 8, 13),
-	new MetaTileClass(groundMetaTile, 10, 13),
-	new MetaTileClass(groundMetaTile, 12, 13),
-	new MetaTileClass(groundMetaTile, 14, 13),
+  new MetaTileClass(groundMetaTile, 0, 13),
+  new MetaTileClass(groundMetaTile, 2, 13),
+  new MetaTileClass(groundMetaTile, 4, 13),
+  new MetaTileClass(groundMetaTile, 6, 13),
+  new MetaTileClass(groundMetaTile, 8, 13),
+  new MetaTileClass(groundMetaTile, 10, 13),
+  new MetaTileClass(groundMetaTile, 12, 13),
+  new MetaTileClass(groundMetaTile, 14, 13),
 ];
 
 const brickArray = [
-	new MetaTileClass(brick, 0, 10),
-	new MetaTileClass(brick, 0, 11),
-	new MetaTileClass(brick, 0, 12),
-	new MetaTileClass(brick, 15, 10),
-	new MetaTileClass(brick, 15, 11),
-	new MetaTileClass(brick, 15, 12),
-	new MetaTileClass(brick, 2, 0),
-	new MetaTileClass(brick, 3, 0),
-	new MetaTileClass(brick, 4, 0),
-	new MetaTileClass(brick, 5, 0),
-	new MetaTileClass(brick, 6, 0),
-	new MetaTileClass(brick, 7, 0),
-	new MetaTileClass(brick, 8, 0),
-	new MetaTileClass(brick, 9, 0),
-	new MetaTileClass(brick, 10, 0),
-	new MetaTileClass(brick, 11, 0),
-	new MetaTileClass(brick, 12, 0),
-	new MetaTileClass(brick, 13, 0),
+  new MetaTileClass(brick, 0, 10),
+  new MetaTileClass(brick, 0, 11),
+  new MetaTileClass(brick, 0, 12),
+  new MetaTileClass(brick, 15, 10),
+  new MetaTileClass(brick, 15, 11),
+  new MetaTileClass(brick, 15, 12),
+  new MetaTileClass(brick, 2, 0),
+  new MetaTileClass(brick, 3, 0),
+  new MetaTileClass(brick, 4, 0),
+  new MetaTileClass(brick, 5, 0),
+  new MetaTileClass(brick, 6, 0),
+  new MetaTileClass(brick, 7, 0),
+  new MetaTileClass(brick, 8, 0),
+  new MetaTileClass(brick, 9, 0),
+  new MetaTileClass(brick, 10, 0),
+  new MetaTileClass(brick, 11, 0),
+  new MetaTileClass(brick, 12, 0),
+  new MetaTileClass(brick, 13, 0),
 ];
 
 const brickSquareArray = [
-	new MetaTileClass(brickMetaTile, 5, 8),
-	new MetaTileClass(brickMetaTile, 7, 8),
-	new MetaTileClass(brickMetaTile, 9, 8),
+  new MetaTileClass(brickMetaTile, 5, 8),
+  new MetaTileClass(brickMetaTile, 7, 8),
+  new MetaTileClass(brickMetaTile, 9, 8),
 ];
 
-export { render, renderImage, p, screen, widthRatio, heightRatio, goomba };
+export {
+  render,
+  renderImage,
+  canvasPainter as p,
+  screen,
+  widthRatio,
+  heightRatio,
+  goomba,
+};
