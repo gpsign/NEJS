@@ -35,12 +35,13 @@ function render(instance) {
 
 	// brickArray.forEach((b) => b.render());
 	// brickSquareArray.forEach((bq) => bq.render());
-	instance.world.group("entities").forEach((entity) => {
-		entity.calculateMovement();
-	});
 
 	instance.world.group("entities").forEach((entity) => {
 		entity.calculateCollision && entity.calculateCollision();
+	});
+
+	instance.world.group("entities").forEach((entity) => {
+		entity.calculateMovement();
 	});
 
 	instance.world.group("entities").forEach((entity) => {

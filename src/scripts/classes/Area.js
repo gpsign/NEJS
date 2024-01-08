@@ -43,6 +43,10 @@ export default class AreaClass {
 
 		this.clock = world.clock;
 
+		this.defaultHitboxColor = "rgba(255, 0, 0, 0.5)";
+		this.hitboxColor = this.defaultHitboxColor;
+		this.contactHitboxColor = this.defaultHitboxColor;
+
 		if (!child) {
 			this.rightArea = new AreaClass(
 				this.x + this.width / 2,
@@ -120,6 +124,7 @@ export default class AreaClass {
 			const top = this.topArea;
 			top.x = this.x;
 			top.y = this.y;
+			top.height = this.height / 2;
 			top.update();
 
 			const bottom = this.bottomArea;
@@ -145,12 +150,16 @@ export default class AreaClass {
 	}
 	isInsideAreaRight(area) {
 		const result = this.isInsideArea(area.rightArea);
+
+		if (result) this.setHitboxColor(this.contactHitboxColor);
+		else this.setHitboxColor();
+
 		return result;
 	}
-	renderHitbox(color = "rgba(255, 0, 0, 0.5)") {
+	renderHitbox() {
 		if (this.hitbox && this.clock != world.clock) {
 			this.clock = world.clock;
-			canvasPainter.fillStyle = color;
+			canvasPainter.fillStyle = this.hitboxColor;
 			canvasPainter.fillRect(this.x, this.y, this.width, this.height);
 		}
 
@@ -161,8 +170,15 @@ export default class AreaClass {
 			this.bottomArea.renderHitbox();
 		}
 	}
-
 	showHitbox() {
 		this.hitbox = true;
+	}
+	setContactHitboxColor(color = undefined) {
+		if (color) this.contactHitboxColor = color;
+		else this.contactHitboxColor = this.defaultHitboxColor;
+	}
+	setHitboxColor(color = undefined) {
+		if (color) this.hitboxColor = color;
+		else this.hitboxColor = this.defaultHitboxColor;
 	}
 }

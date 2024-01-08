@@ -13,7 +13,7 @@ const player = new PlayerClass({
 	width: 1,
 	height: 1,
 	spriteIndex: 16,
-	debug: ["x"],
+	debug: ["x", "vx"],
 	layer: 1,
 });
 
@@ -27,8 +27,10 @@ const wall = new WallClass({
 	debug: ["top", "right", "left"],
 });
 
-wall.leftArea.showHitbox();
-player.rightArea.showHitbox();
+wall.topArea.showHitbox();
+player.bottomArea.showHitbox();
+
+player.rightArea.setContactHitboxColor("rgba(0, 255, 0, 0.5)");
 
 new WallClass({
 	xTile: 6,
