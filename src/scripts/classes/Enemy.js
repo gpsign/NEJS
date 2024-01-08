@@ -3,13 +3,24 @@ import { EntityClass } from "./Entity.js";
 import { goomba, p, screen, widthRatio } from "../render.js";
 
 export class EnemyClass extends EntityClass {
-	constructor(xTile, yTile, width, height, spriteIndex, name = "", debug) {
-		super(xTile, yTile, width, height, spriteIndex, name, debug);
-		this.vx = 1 * widthRatio;
-		this.vy = 0;
+	constructor(props) {
+		const defaultProps = {
+			vx: 1 * widthRatio,
+			vyCap: 5,
+			spriteChangeRate: 0,
+			spriteIndex: 16,
+		};
+
+		const configProps = { ...defaultProps, ...props };
+
+		super(configProps);
+
+		const { vx, spriteIndex, spriteChangeRate, vyCap } = configProps;
+
+		this.vx = vx;
 		this.spriteIndex = spriteIndex;
-		this.spriteChangeRate = 0;
-		this.vyCap = 5;
+		this.spriteChangeRate = spriteChangeRate;
+		this.vyCap = vyCap;
 	}
 	wallCollision() {
 		world.walls.forEach((wall) => {

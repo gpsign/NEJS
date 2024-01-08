@@ -44,20 +44,45 @@ export default class AreaClass {
 		this.clock = world.clock;
 
 		if (!child) {
-			this.rightArea = this.getRightArea();
+			this.rightArea = new AreaClass(
+				this.x + this.width / 2,
+				this.y,
+				this.width / 2,
+				this.height,
+				1,
+				1,
+				true
+			);
+			this.topArea = new AreaClass(
+				this.x,
+				this.y,
+				this.width,
+				this.height / 2,
+				1,
+				1,
+				true
+			);
+			this.leftArea = new AreaClass(
+				this.x,
+				this.y,
+				this.width / 2,
+				this.height,
+				1,
+				1,
+				true
+			);
+			this.bottomArea = new AreaClass(
+				this.x,
+				this.y + this.height / 2,
+				this.width,
+				this.height / 2,
+				1,
+				1,
+				true
+			);
 		}
 	}
-	getRightArea() {
-		return new AreaClass(
-			this.x + this.width / 2,
-			this.y,
-			this.width / 2,
-			this.height,
-			1,
-			1,
-			true
-		);
-	}
+
 	update() {
 		this.top = this.y;
 		this.right = this.xWidth;
@@ -85,8 +110,21 @@ export default class AreaClass {
 			const right = this.rightArea;
 			right.x = this.x + this.width / 2;
 			right.y = this.y;
-			right.width = this.width / 2;
-			right.height = this.height;
+			right.update();
+
+			const left = this.leftArea;
+			left.x = this.x;
+			left.y = this.y;
+			left.update();
+
+			const top = this.topArea;
+			top.x = this.x;
+			top.y = this.y;
+			top.update();
+
+			const bottom = this.bottomArea;
+			bottom.x = this.x;
+			bottom.y = this.y + this.height / 2;
 		}
 	}
 	isPointInside(point) {
@@ -103,15 +141,6 @@ export default class AreaClass {
 		return false;
 	}
 	isInsideAreaTop(area) {
-		const topArea = new AreaClass(
-			area.x,
-			area.y,
-			area.width,
-			area.height / 2,
-			1,
-			1
-		);
-
 		return this.isInsideArea(topArea);
 	}
 	isInsideAreaRight(area) {
@@ -127,6 +156,9 @@ export default class AreaClass {
 
 		if (!this.child) {
 			this.rightArea.renderHitbox();
+			this.leftArea.renderHitbox();
+			this.topArea.renderHitbox();
+			this.bottomArea.renderHitbox();
 		}
 	}
 
