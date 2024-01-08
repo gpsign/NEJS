@@ -4,16 +4,35 @@ import { world } from "../world.js";
 import { EntityClass } from "./Entity.js";
 
 export class PlayerClass extends EntityClass {
-  constructor(xTile, yTile, width, height, spriteIndex, name = "", debug = []) {
-    super(xTile, yTile, width, height, spriteIndex, name, "entities", debug);
-    this.vx = 0;
-    this.vy = 0;
-    this.walkingCap = 50 * 625;
-    this.runningCap = 2 * this.walkingCap;
-    this.jumpHeight = 12;
-    this.acceleration = 625;
-    this.deceleration = 1 * this.acceleration;
-    this.spriteChangeRate = 0;
+  constructor(props) {
+    const defaultProps = {
+      name: "Player",
+      walkingCap: 50 * 625,
+      runningCap: 100 * 625,
+      jumpHeight: 12,
+      acceleration: 625,
+      deceleration: 625,
+      spriteChangeRate: 0,
+    };
+    const configProps = { ...defaultProps, ...props };
+
+    super(configProps);
+
+    const {
+      walkingCap,
+      runningCap,
+      jumpHeight,
+      acceleration,
+      deceleration,
+      spriteChangeRate,
+    } = configProps;
+
+    this.walkingCap = walkingCap;
+    this.runningCap = runningCap;
+    this.jumpHeight = jumpHeight;
+    this.acceleration = acceleration;
+    this.deceleration = deceleration;
+    this.spriteChangeRate = spriteChangeRate;
   }
   decelerate() {
     //Decelerates the player's velocity.
@@ -26,7 +45,7 @@ export class PlayerClass extends EntityClass {
     }
   }
   wallCollision() {
-    world.walls.forEach((wall) => {
+    world.group("walls").forEach((wall) => {
       this.isInsideAreaRight(wall);
 
       if (this.checkTopCollision(wall)) {
@@ -49,9 +68,10 @@ export class PlayerClass extends EntityClass {
     });
   }
   entityCollision() {
-    for (let i = 0; i < world.entities.length; i++) {
-      if (world.entities[i] != undefined && world.entities[i] != this) {
-        const collided = this.checkCollision(world.entities[i]);
+    const entities = world.group("entities");
+    for (let i = 0; i < entities.length; i++) {
+      if (world.entities[i] != undefined && entities[i] != this) {
+        const collided = this.checkCollision(entities[i]);
 
         if (collided)
           if (collided === "top") {
@@ -64,7 +84,7 @@ export class PlayerClass extends EntityClass {
     }
   }
   calculateMovement() {
-    this.updateSides();
+    this.update();
 
     keyMap["shift"]
       ? (this.vxCap = this.runningCap)

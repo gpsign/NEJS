@@ -12,17 +12,41 @@ import { world } from "../world.js";
 
 export class EntityClass extends AreaClass {
   spriteArray = [];
+  onGround = false;
+  renderStepCount = 0;
+  stepVx = 0;
 
-  constructor(
-    xTile,
-    yTile,
-    width,
-    height,
-    spriteIndex,
-    name = "",
-    group = "entities",
-    debug = []
-  ) {
+  constructor(props) {
+    const defaultProps = {
+      xTile: 0,
+      yTile: 0,
+      width: 0,
+      height: 0,
+      spriteIndex: 0,
+      name: `entity ${world.entities?.length + 1}`,
+      group: "entities",
+      debug: [],
+      vx: 0,
+      vy: 0,
+      layer: 0,
+    };
+
+    const configProps = { ...defaultProps, ...props };
+
+    const {
+      xTile,
+      yTile,
+      width,
+      height,
+      vy,
+      vx,
+      spriteIndex,
+      name,
+      debug,
+      group,
+      layer,
+    } = configProps;
+
     super(
       Sprites.tileSize * xTile,
       Sprites.tileSize * yTile,
@@ -30,17 +54,18 @@ export class EntityClass extends AreaClass {
       Sprites.tileSize * height
     );
 
-    this.vy = 0;
-    this.vx = 0;
-    this.onGround = false;
-    this.renderStepCount = 0;
+    this.vy = vy;
+    this.vx = vx;
+
     this.spriteIndex = spriteIndex;
     this.name = name;
-    this.stepVx = 0;
     this.debug = debug;
 
     if (!world[group]) world[group] = [];
     world[group].push(this);
+
+    if (!world.layers[layer]) world.layers[layer] = [];
+    world.layers[layer].push(this);
   }
   log() {
     if (this.debug.length != 0) logObject(this, this.debug);
@@ -50,20 +75,6 @@ export class EntityClass extends AreaClass {
   }
   updateSprite() {
     if (this.spriteArray.length === 0) this.spriteArray = Sprites.array;
-  }
-  updateSides() {
-    this.top = this.y;
-    this.right = this.x + this.width;
-    this.bottom = this.y + this.height;
-    this.left = this.x;
-
-    this.FR = this.right + this.transformCoordinates(this.vx);
-    this.FL = this.left + this.transformCoordinates(this.vx);
-    this.FB = this.bottom + this.vy;
-    this.FT = this.top + this.vy;
-
-    this.widthLine = [this.FL, this.FR];
-    this.heightLine = [this.FT, this.FB];
   }
   sumVx(value) {
     this.vx += value * widthRatio;
@@ -102,7 +113,7 @@ export class EntityClass extends AreaClass {
   render() {
     //Sprite logic
     this.changeSprite();
-    this.updateSides();
+    this.update();
 
     //StepCount for changing sprite
     this.renderStepCount++;
@@ -111,7 +122,13 @@ export class EntityClass extends AreaClass {
 
     if (!isValid(this.newSprite))
       for (let i = 0; i < this.height; i += Sprites.tileSize * heightRatio)
-        for (let j = 0; j < this.width; j += Sprites.tileSize * widthRatio)
+        for (let j = 0; j < this.width; j += Sprites.tileSize * widthRatio) {
+          // canvasPainter.clearRect(
+          //   this.x,
+          //   this.y,
+          //   this.sprite.width * widthRatio,
+          //   this.sprite.height * heightRatio
+          // );
           canvasPainter.drawImage(
             this.sprite,
             this.x + j,
@@ -119,16 +136,17 @@ export class EntityClass extends AreaClass {
             this.sprite.width * widthRatio,
             this.sprite.height * heightRatio
           );
+        }
     else {
       this.newSprite.x = this.x;
       this.newSprite.y = this.y;
       this.newSprite.positionTiles();
-      this.newSprite.render();
+      //this.newSprite.render();
     }
   }
   screenCollision() {
     //Collides with ground
-    if (this.bottom >= screen.height) {
+    if (this.yHeight >= screen.height) {
       this.onGround = true;
       this.y = screen.height - this.height;
       this.vy = 0;

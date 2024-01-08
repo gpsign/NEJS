@@ -1,5 +1,9 @@
 export const world = {
   gravity: 0.2,
+  layers: {},
+  group: (groupName) => {
+    if (world[groupName]) return world[groupName];
+    return [];
+  },
+  clock: 1,
 };
-
-//new EnemyClass(12, 3.5, 1, 1, 82);

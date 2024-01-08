@@ -1,21 +1,42 @@
 import applyConfig from "./applyConfigs.js";
 import { keyMap } from "./keymap.js";
 import { applyMenus } from "./menus.js";
-import { render, renderImage } from "./render.js";
+import { render } from "./render.js";
 import { setObject } from "./utils.js";
 import { world } from "./world.js";
 import { PlayerClass } from "./classes/Player.js";
 import { WallClass } from "./classes/Wall.js";
 
-new PlayerClass(12, 7, 1, 1, 16, "player", ["left", "right", "bottom"]);
-//new EnemyClass(12, 12, 1, 1, 82, "enemy-1", ["left", "right"]),
+const player = new PlayerClass({
+  xTile: 12,
+  yTile: 14,
+  width: 1,
+  height: 1,
+  spriteIndex: 16,
+  debug: ["x"],
+  layer: 1,
+});
 
-new WallClass(5, 8, 6, 2, 68);
-new WallClass(0, 10, 1, 3, 68);
-new WallClass(0, 10, 1, 3, 68);
-new WallClass(0, 14, 10, 2, 66, "chão-left", ["top", "right"]);
-new WallClass(12, 14, 1, 2, 66, "chão-dir", ["top", "right"]);
-new WallClass(4, 8, 1, 1, 24);
+player.rightArea.showHitbox();
+
+new WallClass({
+  xTile: 12,
+  yTile: 14,
+  width: 1,
+  height: 2,
+  spriteIndex: 66,
+  name: "chão-dir",
+  debug: ["top", "right", "left"],
+});
+
+new WallClass({
+  xTile: 6,
+  yTile: 14,
+  width: 1,
+  height: 2,
+  spriteIndex: 66,
+  layer: 2,
+});
 
 export const instance = {
   game: undefined,
@@ -43,11 +64,11 @@ function previousFrame() {
   renderState();
 }
 
-function renderState() {
-  setObject(instance.world, stateMemory[stateIndex]);
+// function renderState() {
+//   setObject(instance.world, stateMemory[stateIndex]);
 
-  renderImage(instance);
-}
+//   renderImage(instance);
+// }
 
 export function start() {
   instance.game = setInterval(nextFrame, 1000 / instance.FPS);

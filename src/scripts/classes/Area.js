@@ -1,5 +1,6 @@
 import { heightRatio, p as canvasPainter, widthRatio } from "../render.js";
 import { contains } from "../utils.js";
+import { world } from "../world.js";
 
 export default class AreaClass {
   constructor(
@@ -8,8 +9,11 @@ export default class AreaClass {
     width,
     height,
     widthScale = widthRatio,
-    heightScale = heightRatio
+    heightScale = heightRatio,
+    child = false
   ) {
+    this.child = child;
+
     this.x = x * widthScale;
     this.y = y * heightScale;
     this.width = width * widthScale;
@@ -25,14 +29,41 @@ export default class AreaClass {
     this.bottomLeft = [this.x, this.y + this.height];
     this.bottomRight = [this.x + this.width, this.y + this.height];
 
+    this.top = this.y;
+    this.right = this.xWidth;
+    this.left = this.x;
+    this.bottom = this.yHeight;
+
     this.points = [
       this.topLeft,
       this.topRight,
       this.bottomLeft,
       this.bottomRight,
     ];
+
+    this.clock = world.clock;
+
+    if (!child) {
+      this.rightArea = this.getRightArea();
+    }
+  }
+  getRightArea() {
+    return new AreaClass(
+      this.x + this.width / 2,
+      this.y,
+      this.width / 2,
+      this.height,
+      1,
+      1,
+      true
+    );
   }
   update() {
+    this.top = this.y;
+    this.right = this.xWidth;
+    this.left = this.x;
+    this.bottom = this.yHeight;
+
     this.topLeft = [this.x, this.y];
     this.topRight = [this.xWidth, this.y];
     this.bottomLeft = [this.x, this.y];
@@ -49,6 +80,14 @@ export default class AreaClass {
       this.bottomLeft,
       this.bottomRight,
     ];
+
+    if (!this.child) {
+      const right = this.rightArea;
+      right.x = this.x + this.width / 2;
+      right.y = this.y;
+      right.width = this.width / 2;
+      right.height = this.height;
+    }
   }
   isPointInside(point) {
     const [pointX, pointY] = point;
@@ -76,23 +115,24 @@ export default class AreaClass {
     return this.isInsideArea(topArea);
   }
   isInsideAreaRight(area) {
-    const rightArea = new AreaClass(
-      area.x + area.width / 2,
-      area.y,
-      area.width / 2,
-      area.height,
-      1,
-      1
-    );
+    area.rightArea.showHitbox();
 
-    //console.log(area.points, rightArea.points);
-
-    rightArea.showHitbox();
-
-    return this.isInsideArea(rightArea);
+    const result = this.isInsideArea(area.rightArea);
+    return result;
   }
-  showHitbox(color = "rgba(255, 0, 0, 0.5)") {
-    canvasPainter.fillStyle = color;
-    canvasPainter.fillRect(this.x, this.y, this.width, this.height);
+  renderHitbox(color = "rgba(255, 0, 0, 0.5)") {
+    if (this.hitbox && this.clock != world.clock) {
+      this.clock = world.clock;
+      canvasPainter.fillStyle = color;
+      canvasPainter.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    if (!this.child) {
+      this.rightArea.renderHitbox();
+    }
+  }
+
+  showHitbox() {
+    this.hitbox = true;
   }
 }
