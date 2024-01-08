@@ -17,7 +17,7 @@ const player = new PlayerClass({
   layer: 1,
 });
 
-player.rightArea.showHitbox();
+player.showHitbox();
 
 new WallClass({
   xTile: 12,

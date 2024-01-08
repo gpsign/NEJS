@@ -18,50 +18,55 @@ const widthRatio = screen.width / NESWidth;
 const heightRatio = screen.height / NESHeight;
 
 function saveState(instance) {
-  let state = copyObject(instance.world);
+	let state = copyObject(instance.world);
 
-  if (stateMemory.length >= 100) {
-    stateMemory.shift();
-    stateMemory.push(state);
-  } else stateMemory.push(state);
+	if (stateMemory.length >= 100) {
+		stateMemory.shift();
+		stateMemory.push(state);
+	} else stateMemory.push(state);
 }
 
 function render(instance) {
-  world.clock = -world.clock;
-  canvasPainter.clearRect(0, 0, screen.width, screen.height);
+	world.clock = -world.clock;
+	canvasPainter.clearRect(0, 0, screen.width, screen.height);
+	const renderBuffer = [];
 
-  //    saveState(instance);
+	//    saveState(instance);
 
-  // brickArray.forEach((b) => b.render());
-  // brickSquareArray.forEach((bq) => bq.render());
-  instance.world.group("entities").forEach((entity) => {
-    entity.calculateMovement();
-  });
+	// brickArray.forEach((b) => b.render());
+	// brickSquareArray.forEach((bq) => bq.render());
+	instance.world.group("entities").forEach((entity) => {
+		entity.calculateMovement();
+	});
 
-  instance.world.group("entities").forEach((entity) => {
-    entity.calculateCollision && entity.calculateCollision();
-  });
+	instance.world.group("entities").forEach((entity) => {
+		entity.calculateCollision && entity.calculateCollision();
+	});
 
-  instance.world.group("entities").forEach((entity) => {
-    if (config.debugMode) entity.log();
-    //entity.render();
-  });
+	instance.world.group("entities").forEach((entity) => {
+		if (config.debugMode) entity.log();
+		//entity.render();
+	});
 
-  instance.world.group("walls").forEach((walls) => {
-    if (config.debugMode) walls.log();
-    //walls.render();
-  });
+	instance.world.group("walls").forEach((walls) => {
+		if (config.debugMode) walls.log();
+		//walls.render();
+	});
 
-  const layers = Object.values(world.layers);
+	const layers = Object.values(world.layers);
 
-  for (const layer of layers) {
-    for (const entity of layer) {
-      entity.render && entity.render();
-      entity.renderHitbox();
-    }
-  }
+	for (const layer of layers) {
+		for (const entity of layer) {
+			entity.render && entity.render();
 
-  //groundArray.forEach((g) => g.render());
+			renderBuffer.push(entity);
+		}
+	}
+
+	for (const bRender of renderBuffer) {
+		bRender.renderHitbox();
+	}
+	//groundArray.forEach((g) => g.render());
 }
 
 // const brick = brickSprite(canvasPainter, palettes[1]);
