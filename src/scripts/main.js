@@ -13,33 +13,33 @@ const player = new PlayerClass({
 	width: 1,
 	height: 1,
 	spriteIndex: 16,
-	debug: ["x", "vx"],
+	debug: ["vy", "y", "bottom", "vertical", "horizontal"],
 	layer: 1,
 });
 
-const wall = new WallClass({
+const wallA = new WallClass({
 	xTile: 12,
-	yTile: 14,
+	yTile: 12,
 	width: 1,
-	height: 2,
+	height: 1,
 	spriteIndex: 66,
 	name: "chão-dir",
-	debug: ["top", "right", "left"],
 });
 
-wall.topArea.showHitbox();
-player.bottomArea.showHitbox();
-
-player.rightArea.setContactHitboxColor("rgba(0, 255, 0, 0.5)");
-
-new WallClass({
-	xTile: 6,
+const wallB = new WallClass({
+	xTile: 1,
 	yTile: 14,
-	width: 1,
-	height: 2,
+	width: 4,
+	height: 1,
 	spriteIndex: 66,
 	layer: 2,
+	debug: ["top"],
 });
+
+player.bottomArea.showHitbox();
+wallB.topArea.showHitbox();
+
+player.rightArea.setContactHitboxColor("rgba(0, 255, 0, 0.5)");
 
 export const instance = {
 	game: undefined,

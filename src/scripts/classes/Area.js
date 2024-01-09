@@ -66,6 +66,7 @@ export default class AreaClass {
 				1,
 				true
 			);
+
 			this.leftArea = new AreaClass(
 				this.x,
 				this.y,
@@ -124,7 +125,6 @@ export default class AreaClass {
 			const top = this.topArea;
 			top.x = this.x;
 			top.y = this.y;
-			top.height = this.height / 2;
 			top.update();
 
 			const bottom = this.bottomArea;
@@ -141,6 +141,7 @@ export default class AreaClass {
 		);
 	}
 	isInsideArea(area) {
+		this.update();
 		for (const point of this.points) if (area.isPointInside(point)) return true;
 
 		return false;
@@ -167,6 +168,7 @@ export default class AreaClass {
 			this.rightArea.renderHitbox();
 			this.leftArea.renderHitbox();
 			this.topArea.renderHitbox();
+
 			this.bottomArea.renderHitbox();
 		}
 	}

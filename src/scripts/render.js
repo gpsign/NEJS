@@ -37,11 +37,13 @@ function render(instance) {
 	// brickSquareArray.forEach((bq) => bq.render());
 
 	instance.world.group("entities").forEach((entity) => {
-		entity.calculateCollision && entity.calculateCollision();
+		entity.calculateMovement();
+		console.log("movido", entity.x, entity.y);
 	});
 
 	instance.world.group("entities").forEach((entity) => {
-		entity.calculateMovement();
+		entity.calculateCollision && entity.calculateCollision();
+		console.log("corrigido", entity.x, entity.y);
 	});
 
 	instance.world.group("entities").forEach((entity) => {

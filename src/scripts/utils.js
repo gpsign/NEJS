@@ -1,5 +1,5 @@
 export function contains(value, start, end) {
-	if (value >= start && value <= end) return true;
+	if (value > start && value < end) return true;
 	else return false;
 }
 

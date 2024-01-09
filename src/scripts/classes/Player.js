@@ -9,7 +9,7 @@ export class PlayerClass extends EntityClass {
 			name: "Player",
 			walkingCap: 50 * 625,
 			runningCap: 100 * 625,
-			jumpHeight: 12,
+			jumpHeight: 100 * 1250,
 			acceleration: 625,
 			deceleration: 625,
 			spriteChangeRate: 0,
@@ -45,27 +45,50 @@ export class PlayerClass extends EntityClass {
 		}
 	}
 	wallCollision() {
-		world.group("walls").forEach((wall) => {
-			let a = this.isInsideAreaRight(wall);
+		let horizontalCollision = false;
+		let verticalCollision = false;
 
+		world.group("walls").forEach((wall) => {
 			if (this.checkBottomCollision(wall)) {
-				this.y = wall.y - this.height - 1;
+				this.y = wall.y - this.height;
 				this.vy = 0;
 				this.onGround = true;
-			}
-			if (this.checkTopCollision(wall)) {
-				this.y = wall.yHeight + 1;
+				verticalCollision = true;
+				this.vertical = true;
+
+				return;
+			} else if (this.checkTopCollision(wall)) {
+				this.y++;
+
 				this.vy = 0;
+				verticalCollision = true;
+				this.vertical = true;
+
+				return;
 			}
+
 			if (this.checkLeftCollision(wall)) {
-				this.x = wall.xWidth;
+				this.x++;
+
 				this.vx = 0;
+				horizontalCollision = true;
+				this.horizontal = true;
+
+				return;
 			}
 			if (this.checkRightCollision(wall)) {
-				this.x = wall.x - this.width - 1;
+				this.x--;
+
 				this.vx = 0;
+				horizontalCollision = true;
+				this.horizontal = true;
+
+				return;
 			}
 		});
+
+		if (!verticalCollision) this.vertical = false;
+		if (!horizontalCollision) this.horizontal = false;
 	}
 	entityCollision() {
 		const entities = world.group("entities");
@@ -119,6 +142,8 @@ export class PlayerClass extends EntityClass {
 		if (keyMap["a"] && keyMap["d"]) this.decelerate();
 
 		this.x += this.transformCoordinates(this.vx);
-		this.y += Math.floor(this.vy);
+		this.y += this.transformCoordinates(this.vy);
+
+		this.update();
 	}
 }
