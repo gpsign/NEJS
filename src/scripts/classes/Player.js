@@ -44,51 +44,38 @@ export class PlayerClass extends EntityClass {
 			else this.sumVx(this.deceleration);
 		}
 	}
-	wallCollision() {
-		let horizontalCollision = false;
-		let verticalCollision = false;
-
+	horizontalWallCollision() {
 		world.group("walls").forEach((wall) => {
-			if (this.checkBottomCollision(wall)) {
-				this.y = wall.y - this.height;
-				this.vy = 0;
-				this.onGround = true;
-				verticalCollision = true;
-				this.vertical = true;
-
-				return;
-			} else if (this.checkTopCollision(wall)) {
-				this.y++;
-
-				this.vy = 0;
-				verticalCollision = true;
-				this.vertical = true;
-
-				return;
-			}
-
 			if (this.checkLeftCollision(wall)) {
-				this.x++;
-
+				this.x -= this.transformCoordinates(this.vx);
 				this.vx = 0;
-				horizontalCollision = true;
-				this.horizontal = true;
 
 				return;
 			}
 			if (this.checkRightCollision(wall)) {
-				this.x--;
-
+				this.x -= this.transformCoordinates(this.vx);
 				this.vx = 0;
-				horizontalCollision = true;
-				this.horizontal = true;
 
 				return;
 			}
 		});
+	}
+	verticalWallCollision() {
+		world.group("walls").forEach((wall) => {
+			if (this.checkBottomCollision(wall)) {
+				this.y -= this.transformCoordinates(this.vy);
+				this.vy = 0;
+				this.onGround = true;
 
-		if (!verticalCollision) this.vertical = false;
-		if (!horizontalCollision) this.horizontal = false;
+				return;
+			}
+			if (this.checkTopCollision(wall)) {
+				this.y -= this.transformCoordinates(this.vy);
+				this.vy = 0;
+
+				return;
+			}
+		});
 	}
 	entityCollision() {
 		const entities = world.group("entities");
@@ -107,25 +94,30 @@ export class PlayerClass extends EntityClass {
 		}
 	}
 	calculateMovement() {
-		this.update();
-
-		keyMap["shift"]
-			? (this.vxCap = this.runningCap)
-			: (this.vxCap = this.walkingCap);
-
 		//Gravity
 		this.sumVy(world.gravity * heightRatio);
-
-		//decelerates when not moving
-		if (!keyMap["a"] && !keyMap["d"]) this.decelerate();
-
-		this.screenCollision();
 
 		//Jumps
 		if ((keyMap["w"] || keyMap[" "]) && this.onGround) {
 			this.onGround = false;
 			this.sumVy(-this.jumpHeight);
 		}
+
+		this.y += this.transformCoordinates(this.vy);
+
+		this.update();
+		this.verticalWallCollision();
+
+		this.update();
+
+		keyMap["shift"]
+			? (this.vxCap = this.runningCap)
+			: (this.vxCap = this.walkingCap);
+
+		//decelerates when not moving
+		if (!keyMap["a"] && !keyMap["d"]) this.decelerate();
+
+		this.screenCollision();
 
 		let direction = 0;
 
@@ -142,7 +134,9 @@ export class PlayerClass extends EntityClass {
 		if (keyMap["a"] && keyMap["d"]) this.decelerate();
 
 		this.x += this.transformCoordinates(this.vx);
-		this.y += this.transformCoordinates(this.vy);
+
+		this.update();
+		this.horizontalWallCollision();
 
 		this.update();
 	}

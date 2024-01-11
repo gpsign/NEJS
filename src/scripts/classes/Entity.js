@@ -181,15 +181,15 @@ export class EntityClass extends AreaClass {
 		return false;
 	}
 	checkTopCollision(other) {
-		return this.topArea.isInsideArea(other);
+		return this.topArea.isInsideArea(other.bottomArea);
 	}
 	checkRightCollision(other) {
-		return this.rightArea.isInsideArea(other);
+		return this.rightArea.isInsideArea(other.leftArea);
 	}
 	checkBottomCollision(other) {
-		return this.bottomArea.isInsideArea(other);
+		return this.bottomArea.isInsideArea(other.topArea);
 	}
 	checkLeftCollision(other) {
-		return this.leftArea.isInsideArea(other);
+		return this.leftArea.isInsideArea(other.rightArea);
 	}
 }

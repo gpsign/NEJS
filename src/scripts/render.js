@@ -38,12 +38,6 @@ function render(instance) {
 
 	instance.world.group("entities").forEach((entity) => {
 		entity.calculateMovement();
-		console.log("movido", entity.x, entity.y);
-	});
-
-	instance.world.group("entities").forEach((entity) => {
-		entity.calculateCollision && entity.calculateCollision();
-		console.log("corrigido", entity.x, entity.y);
 	});
 
 	instance.world.group("entities").forEach((entity) => {
