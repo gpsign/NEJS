@@ -1,5 +1,5 @@
-export function contains(value, start, end, margin = 0) {
-	if (value >= start - margin && value <= end - margin) return true;
+export function contains(value, start, end, margin = 1) {
+	if (value >= start + margin && value <= end - margin) return true;
 	else return false;
 }
 
