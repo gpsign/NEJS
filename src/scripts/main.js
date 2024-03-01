@@ -13,7 +13,7 @@ const player = new PlayerClass({
 	width: 1,
 	height: 1,
 	spriteIndex: 16,
-	debug: ["vy", "y", "bottom"],
+	debug: ["x", "y"],
 	layer: 1,
 });
 
@@ -29,7 +29,7 @@ const wallA = new WallClass({
 const wallB = new WallClass({
 	xTile: 4,
 	yTile: 14,
-	width: 3,
+	width: 7,
 	height: 1,
 	spriteIndex: 66,
 	layer: 2,

@@ -143,6 +143,7 @@ export default class AreaClass {
 	isInsideArea(area) {
 		this.update();
 		for (const point of this.points) if (area.isPointInside(point)) return true;
+		for (const point of area.points) if (this.isPointInside(point)) return true;
 
 		return false;
 	}
