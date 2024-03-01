@@ -13,7 +13,7 @@ const player = new PlayerClass({
 	width: 1,
 	height: 1,
 	spriteIndex: 16,
-	debug: ["x", "y"],
+	debug: ["x", "y", "yHeight"],
 	layer: 1,
 });
 
@@ -33,7 +33,7 @@ const wallB = new WallClass({
 	height: 1,
 	spriteIndex: 66,
 	layer: 2,
-	debug: ["top"],
+	debug: ["y"],
 });
 
 player.bottomArea.showHitbox();

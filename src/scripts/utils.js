@@ -1,29 +1,43 @@
-export function contains(value, start, end, margin = 1) {
+export function contains(value, start, end, margin = 0) {
 	if (value >= start + margin && value <= end - margin) return true;
 	else return false;
 }
 
-export function lineOverlaps(...args) {
-	let result = false;
+export function lineOverlaps(A, B) {
+	const [[A_start_X, A_start_Y], [A_end_X, A_end_Y]] = A;
+	const [[B_start_X, B_start_Y], [B_end_X, B_end_Y]] = B;
 
-	for (const i of args) if (i === undefined) return;
+	// const AVerticalInterval = Math.abs(A_end_Y - A_start_Y);
+	// const AHorizontaInterval = Math.abs(A_end_X - A_start_X);
 
-	if (args.length > 2) {
-		const [aStart, aEnd, bStart, bEnd] = args;
+	// const BVerticalInterval = Math.abs(B_end_Y - B_start_Y);
+	// const BHorizontalInterval = Math.abs(B_end_X - B_start_X);
 
-		if (contains(aStart, bStart, bEnd) || contains(aEnd, bStart, bEnd))
-			result = true;
-		else if (aStart <= bStart && aEnd >= bEnd) result = true;
-	} else if (args[0].push && args[1].push) {
-		const [aStart, aEnd] = args[0];
-		const [bStart, bEnd] = args[1];
+	console.log(contains(A_start_X, B_end_X, B_start_X));
 
-		if (contains(aStart, bStart, bEnd) || contains(aEnd, bStart, bEnd))
-			result = true;
-		else if (aStart <= bStart && aEnd >= bEnd) result = true;
+	if (
+		contains(A_start_Y, B_end_Y, B_start_Y) ||
+		contains(A_end_Y, B_start_Y, B_end_Y)
+	) {
+		return (
+			contains(A_start_X, B_end_X, B_start_X) ||
+			contains(A_end_X, B_end_X, B_start_X)
+		);
 	}
-	return result;
+
+	return false;
 }
+
+let A = [
+	[1, 1],
+	[3, 1],
+];
+let B = [
+	[2, 2],
+	[2, -1],
+];
+
+lineOverlaps(A, B);
 
 export function unfold(array) {
 	const aux = [];

@@ -63,14 +63,13 @@ export class PlayerClass extends EntityClass {
 	verticalWallCollision() {
 		world.group("walls").forEach((wall) => {
 			if (this.checkBottomCollision(wall)) {
-				this.y -= this.transformCoordinates(this.vy);
+				while (this.y + this.height + 5 < wall.y) this.y++;
 				this.vy = 0;
 				this.onGround = true;
 
 				return;
 			}
 			if (this.checkTopCollision(wall)) {
-				this.y -= this.transformCoordinates(this.vy);
 				this.vy = 0;
 
 				return;
